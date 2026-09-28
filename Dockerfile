@@ -1,26 +1,14 @@
-# ---- deps: install dependencies ----
-FROM node:22-alpine AS deps
+# ---- build: genera la web estática ----
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
-
-# ---- builder: build static site ----
-FROM node:22-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# --ignore-scripts evita descargar ffmpeg (solo lo usa el script local de vídeos)
+RUN npm ci --ignore-scripts
 COPY . .
 RUN npm run build
 
-# ---- server: serve static files ----
-FROM node:22-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-
-# Install a lightweight HTTP server
-RUN npm install -g serve
-
-# Copy built dist folder from builder
-COPY --from=builder /app/dist ./dist
-
-EXPOSE 3000
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# ---- web: nginx sirve la carpeta dist ----
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
