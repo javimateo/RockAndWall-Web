@@ -1,0 +1,92 @@
+---
+/**
+ * Pegatina redonda troquelada, como las de las taquillas del rocódromo.
+ * El texto corre alrededor y el centro es libre (slot).
+ */
+interface Props {
+  ring: string;
+  color?: 'orange' | 'blue' | 'yellow' | 'ink' | 'white' | 'green';
+  size?: string;
+  rot?: number;
+  class?: string;
+}
+
+const { ring, color = 'orange', size = '150px', rot = -8, class: className } = Astro.props;
+const id = `ring-${Math.abs([...ring].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7))}`;
+---
+
+<div class:list={['pegatina', className]} data-color={color} style={`--size:${size};--rot:${rot}deg`}>
+  <svg viewBox="0 0 200 200" aria-hidden="true">
+    <defs>
+      <path id={id} d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"></path>
+    </defs>
+    <circle cx="100" cy="100" r="96" class="pegatina__edge"></circle>
+    <circle cx="100" cy="100" r="88" class="pegatina__bg"></circle>
+    <circle cx="100" cy="100" r="54" class="pegatina__inner"></circle>
+    <text class="pegatina__ring"><textPath href={`#${id}`} textLength="446">{ring}</textPath></text>
+  </svg>
+  <div class="pegatina__center"><slot /></div>
+  <span class="visually-hidden">{ring}</span>
+</div>
+
+<style>
+  .pegatina {
+    --bg: var(--orange);
+    --fg: var(--ink);
+    position: relative;
+    width: var(--size);
+    aspect-ratio: 1;
+    rotate: var(--rot);
+    filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.22));
+    transition: rotate 0.6s var(--ease-spring);
+  }
+
+  .pegatina[data-color='blue'] { --bg: var(--blue); --fg: #fff; }
+  .pegatina[data-color='yellow'] { --bg: var(--h-yellow); }
+  .pegatina[data-color='ink'] { --bg: var(--ink); --fg: #fff; }
+  .pegatina[data-color='white'] { --bg: #fff; }
+  .pegatina[data-color='green'] { --bg: var(--h-green); }
+
+  @media (hover: hover) {
+    .pegatina:hover {
+      rotate: calc(var(--rot) + 14deg);
+    }
+  }
+
+  .pegatina svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pegatina__edge { fill: #fff; }
+  .pegatina__bg { fill: var(--bg); }
+  .pegatina__inner {
+    fill: none;
+    stroke: var(--fg);
+    stroke-width: 2;
+    stroke-dasharray: 3 5;
+    opacity: 0.6;
+  }
+
+  .pegatina__ring {
+    fill: var(--fg);
+    font-family: var(--f-display);
+    font-stretch: 75%;
+    font-weight: 850;
+    font-size: 21px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .pegatina__center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--fg);
+    font-family: var(--f-hand);
+    font-size: calc(var(--size) * 0.2);
+    line-height: 0.9;
+    text-align: center;
+  }
+</style>

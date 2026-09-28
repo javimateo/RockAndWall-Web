@@ -1,0 +1,208 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource/permanent-marker/latin-400.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  line-height: 1.55;
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--h-yellow);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ---------- Tipografía ---------- */
+
+.display {
+  font-family: var(--f-display);
+  font-stretch: 62%;
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.h2 {
+  font-family: var(--f-display);
+  font-stretch: 66%;
+  font-weight: 880;
+  font-size: clamp(2.9rem, 1.6rem + 5.4vw, 7rem);
+  line-height: 0.86;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.h3 {
+  font-family: var(--f-display);
+  font-stretch: 72%;
+  font-weight: 820;
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  font-family: var(--f-display);
+  font-stretch: 100%;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Coordenada tipo Kilter (A-K / 1-18) que numera cada sección */
+.coord {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.6em;
+  height: 2.6em;
+  padding: 0 0.5em;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.lead {
+  font-size: clamp(1.08rem, 1rem + 0.4vw, 1.3rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.hand {
+  font-family: var(--f-hand);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ---------- Superficies ---------- */
+
+/*
+ * Pared: gris claro con la rejilla de agujeros de los tornillos (T-nuts),
+ * el grano de la resina y las juntas entre paneles.
+ */
+.wall {
+  --hole: 52px;
+  background-color: var(--wall);
+  background-image:
+    radial-gradient(circle, #6d7075 0 1.3px, #b9bbb7 1.8px, rgb(255 255 255 / 0.8) 2.4px, transparent 3.1px),
+    radial-gradient(circle, #6d7075 0 1.3px, #b9bbb7 1.8px, rgb(255 255 255 / 0.8) 2.4px, transparent 3.1px),
+    var(--speckle),
+    linear-gradient(90deg, var(--seam) 1px, transparent 1px),
+    linear-gradient(0deg, var(--seam) 1px, transparent 1px);
+  background-size:
+    var(--hole) var(--hole),
+    var(--hole) var(--hole),
+    220px 220px,
+    calc(var(--hole) * 8) calc(var(--hole) * 8),
+    calc(var(--hole) * 8) calc(var(--hole) * 8);
+  background-position:
+    0 0,
+    calc(var(--hole) / 2) calc(var(--hole) / 2),
+    0 0,
+    calc(var(--hole) * -0.25) 0,
+    0 calc(var(--hole) * -0.25);
+}
+
+.wall--grey {
+  background-color: var(--wall-2);
+}
+
+.wall--blue {
+  background-color: var(--blue);
+  color: #fff;
+  --seam: rgb(255 255 255 / 0.1);
+}
+
+.night {
+  background: var(--night);
+  color: #e9eef6;
+}
+
+/* ---------- Maquetación ---------- */
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
+}
+
+.section {
+  position: relative;
+  padding-block: clamp(80px, 12vw, 180px);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

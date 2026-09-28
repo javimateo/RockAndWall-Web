@@ -1,0 +1,68 @@
+/*
+ * Tokens de Rock & Wall.
+ * Todos los colores salen de las fotos del rocódromo: la pared gris-blanca,
+ * el azul de las bandas pintadas, el naranja-rojo del logo, las presas y los LEDs de las tablas.
+ */
+:root {
+  /* Pared */
+  --wall: #eeefeb;
+  --wall-2: #e3e4df;
+  --wall-3: #d3d5cf;
+  --seam: rgb(20 22 25 / 0.07);
+
+  /* Tinta (volúmenes negros) */
+  --ink: #121417;
+  --ink-2: #353a41;
+  --ink-3: #62686f;
+
+  /* Marca */
+  --blue: #2b95dc;
+  --blue-deep: #1a6cbd;
+  --blue-ink: #0c3a6b;
+  --orange: #f47a20;
+  --orange-hi: #f9a53c;
+  --red: #e33b2c;
+  --logo-grad: linear-gradient(165deg, var(--orange-hi) 0%, #f06a24 48%, var(--red) 100%);
+
+  /* Presas: circuitos de bloque */
+  --h-white: #f4f3ee;
+  --h-green: #45bf4b;
+  --h-yellow: #ffd23a;
+  --h-blue: #2f7fe0;
+  --h-orange: #ff7a1a;
+  --h-red: #e5352b;
+  --h-pink: #ff4f9a;
+  --h-purple: #7b4fd6;
+  --h-black: #1b1c1f;
+
+  /* Noche: tablas con LEDs (código de la Kilter) */
+  --night: #090c12;
+  --night-2: #111723;
+  --night-3: #1b2333;
+  --led-start: #35f07c;
+  --led-hand: #2fd8f5;
+  --led-foot: #ffa033;
+  --led-top: #ff3fd1;
+
+  /* Colchoneta */
+  --pad: #8d949b;
+  --pad-dark: #6c737a;
+
+  /* Tipografía */
+  --f-display: 'Archivo Variable', 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --f-body: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --f-hand: 'Permanent Marker', 'Segoe Print', 'Comic Sans MS', cursive;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Maquetación */
+  --gutter: clamp(16px, 4vw, 56px);
+  --max: 1320px;
+
+  /* Texturas */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='1' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.17 0 0 0 0 0.18 0 0 0 9 -6.2'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.3'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  --chalk: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.4 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+}

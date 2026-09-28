@@ -1,0 +1,56 @@
+---
+/**
+ * Trozo de cinta americana escrito a rotulador, como las que marcan
+ * la salida de cada bloque. Sirve para etiquetas, grados y avisos.
+ */
+interface Props {
+  color?: 'yellow' | 'white' | 'green' | 'blue' | 'orange' | 'red' | 'pink' | 'purple' | 'black';
+  rot?: number;
+  size?: 'sm' | 'md' | 'lg';
+  as?: 'span' | 'p' | 'strong';
+  class?: string;
+}
+
+const { color = 'yellow', rot = -3, size = 'md', as: Tag = 'span', class: className } = Astro.props;
+---
+
+<Tag class:list={['cinta', `cinta--${size}`, className]} data-color={color} style={`--rot:${rot}deg`}>
+  <slot />
+</Tag>
+
+<style>
+  .cinta {
+    --c: var(--h-yellow);
+    --t: var(--ink);
+    display: inline-block;
+    padding: 0.42em 0.95em 0.36em;
+    color: var(--t);
+    font-family: var(--f-hand);
+    font-size: 1rem;
+    line-height: 1.05;
+    white-space: nowrap;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.3), transparent 38%, rgb(0 0 0 / 0.07)),
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.025) 0 2px, transparent 2px 5px),
+      var(--c);
+    /* Bordes rasgados solo en los extremos, como la cinta cortada con la mano */
+    clip-path: polygon(
+      0.32em 0, calc(100% - 0.3em) 0, 100% 16%, calc(100% - 0.22em) 33%, 100% 50%,
+      calc(100% - 0.3em) 68%, 100% 84%, calc(100% - 0.18em) 100%, 0.28em 100%,
+      0 86%, 0.24em 69%, 0 52%, 0.3em 34%, 0 17%
+    );
+    transform: rotate(var(--rot));
+  }
+
+  .cinta--sm { font-size: 0.82rem; }
+  .cinta--lg { font-size: 1.45rem; }
+
+  .cinta[data-color='white'] { --c: #e2e1d9; }
+  .cinta[data-color='green'] { --c: var(--h-green); }
+  .cinta[data-color='blue'] { --c: var(--h-blue); --t: #fff; }
+  .cinta[data-color='orange'] { --c: var(--h-orange); }
+  .cinta[data-color='red'] { --c: var(--h-red); --t: #fff; }
+  .cinta[data-color='pink'] { --c: var(--h-pink); }
+  .cinta[data-color='purple'] { --c: var(--h-purple); --t: #fff; }
+  .cinta[data-color='black'] { --c: var(--h-black); --t: #fff; }
+</style>

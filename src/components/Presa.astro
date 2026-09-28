@@ -1,0 +1,191 @@
+---
+/**
+ * Botón con forma de presa de resina.
+ * El tornillo es el icono, al pasar el ratón se llena de magnesio
+ * y al pulsar se hunde un poco, como al cargar peso.
+ */
+interface Props {
+  href: string;
+  color?: 'orange' | 'blue' | 'yellow' | 'green' | 'pink' | 'ink' | 'white';
+  shape?: 'jug' | 'sloper' | 'crimp';
+  icon?: 'arrow' | 'down' | 'out';
+  rot?: number;
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  color = 'orange',
+  shape = 'jug',
+  icon = 'arrow',
+  rot = -2,
+  external = false,
+  class: className,
+} = Astro.props;
+
+const iconPath = {
+  arrow: 'M5 12h13M13 6.5 18.5 12 13 17.5',
+  down: 'M12 5v13M6.5 13 12 18.5 17.5 13',
+  out: 'M7 17 17 7M8.5 7H17v8.5',
+}[icon];
+---
+
+<a
+  class:list={['presa', `presa--${shape}`, className]}
+  data-color={color}
+  href={href}
+  style={`--rot:${rot}deg`}
+  {...external ? { target: '_blank', rel: 'noopener' } : {}}
+>
+  <span class="presa__body" aria-hidden="true"></span>
+  <span class="presa__label"><slot /></span>
+  <span class="presa__bolt" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="14" height="14"><path d={iconPath}></path></svg>
+  </span>
+</a>
+
+<style>
+  .presa {
+    --c: var(--orange);
+    --t: var(--ink);
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85em;
+    padding: 1.15em 1.05em 1.2em 1.7em;
+    color: var(--t);
+    font-family: var(--f-display);
+    font-stretch: 80%;
+    font-weight: 820;
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transform: rotate(var(--rot));
+    transition: transform 0.45s var(--ease-spring);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .presa[data-color='blue'] { --c: var(--blue); --t: #fff; }
+  .presa[data-color='yellow'] { --c: var(--h-yellow); }
+  .presa[data-color='green'] { --c: var(--h-green); }
+  .presa[data-color='pink'] { --c: var(--h-pink); }
+  .presa[data-color='ink'] { --c: #26292e; --t: #fff; }
+  .presa[data-color='white'] { --c: var(--h-white); }
+
+  /* Cuerpo de la presa: resina con volumen, labio inferior y sombra sobre la pared */
+  .presa__body {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 40% 60% 52% 48% / 62% 48% 56% 40%;
+    background:
+      var(--grain),
+      radial-gradient(130% 110% at 28% 18%,
+        color-mix(in oklab, var(--c), white 32%) 0%,
+        var(--c) 42%,
+        color-mix(in oklab, var(--c), black 22%) 100%);
+    box-shadow:
+      inset 0 -7px 0 -1px rgb(0 0 0 / 0.13),
+      inset 0 3px 1px rgb(255 255 255 / 0.35),
+      0 3px 0 color-mix(in oklab, var(--c), black 38%),
+      0 16px 20px -12px rgb(12 14 18 / 0.6);
+    transition: box-shadow 0.3s var(--ease-out), border-radius 0.6s var(--ease-out);
+  }
+
+  /* Magnesio: aparece a manchas donde "agarra" la mano */
+  .presa__body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--chalk);
+    background-size: 90px;
+    opacity: 0;
+    mask: radial-gradient(70% 80% at 32% 38%, #000 25%, transparent 72%);
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .presa__label {
+    position: relative;
+    padding-top: 0.08em;
+  }
+
+  /* Tornillo: agujero oscuro con arandela metálica */
+  .presa__bolt {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.1em;
+    height: 2.1em;
+    border-radius: 50%;
+    color: #fff;
+    background: radial-gradient(circle, #17191c 0 55%, #55595e 57% 64%, #c3c6c8 67% 82%, #8b8f93 86% 100%);
+    box-shadow:
+      inset 0 2px 3px rgb(0 0 0 / 0.55),
+      0 1px 0 rgb(255 255 255 / 0.35);
+  }
+
+  .presa__bolt svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.35s var(--ease-spring);
+  }
+
+  .presa--sloper .presa__body {
+    border-radius: 48% 52% 44% 56% / 70% 66% 34% 30%;
+  }
+
+  .presa--crimp {
+    padding: 0.8em 0.8em 0.85em 1.25em;
+    font-size: 0.88rem;
+  }
+
+  .presa--crimp .presa__body {
+    border-radius: 22% 30% 38% 26% / 48% 44% 56% 52%;
+  }
+
+  @media (hover: hover) {
+    .presa:hover {
+      transform: rotate(calc(var(--rot) * 0.4)) translateY(-3px);
+    }
+    .presa:hover .presa__body::after {
+      opacity: 0.9;
+    }
+    .presa:hover .presa__bolt svg {
+      transform: translateX(2px);
+    }
+    .presa[href^='#']:hover .presa__bolt svg {
+      transform: translateY(2px);
+    }
+  }
+
+  .presa:active {
+    transform: rotate(calc(var(--rot) * 0.4)) translateY(1px) scale(0.975);
+    transition-duration: 0.12s;
+  }
+
+  .presa:active .presa__body {
+    box-shadow:
+      inset 0 -5px 0 -1px rgb(0 0 0 / 0.13),
+      inset 0 3px 1px rgb(255 255 255 / 0.35),
+      0 1px 0 color-mix(in oklab, var(--c), black 38%),
+      0 6px 10px -8px rgb(12 14 18 / 0.6);
+  }
+
+  .presa:focus-visible {
+    outline: none;
+  }
+
+  .presa:focus-visible .presa__body {
+    outline: 3px dashed var(--ink);
+    outline-offset: 5px;
+  }
+</style>

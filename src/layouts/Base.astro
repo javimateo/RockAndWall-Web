@@ -1,0 +1,31 @@
+---
+import '../styles/base.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Rock & Wall Climbing · Rocódromo en Sevilla',
+  description = 'El mayor rocódromo de Andalucía está en Sevilla. Más de 500 m² de bloque, más de 80 vías, Moon Board, Kilter Board y el mejor tardeo.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#eeefeb" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/reveal';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+---
+/**
+ * Logo de Rock & Wall vectorizado desde el vídeo oficial
+ * (scripts/trace-logo.mjs). El monograma se rellena con el degradado
+ * de marca mediante una máscara, así sirve sobre cualquier fondo.
+ */
+import Monogram from '../assets/brand/rw-monogram.svg';
+import Wordmark from '../assets/brand/rw-wordmark.svg';
+
+interface Props {
+  tone?: 'color' | 'white' | 'ink' | 'blue';
+  wordmark?: boolean;
+  size?: string;
+  class?: string;
+}
+
+const { tone = 'color', wordmark = true, size = '44px', class: className } = Astro.props;
+---
+
+<span class:list={['logo', className]} data-tone={tone} style={`--size:${size}`}>
+  <span class="logo__mono" style={`--mask:url(${Monogram.src})`} aria-hidden="true"></span>
+  {wordmark && <Wordmark class="logo__word" aria-hidden="true" />}
+  <span class="visually-hidden">Rock &amp; Wall Climbing</span>
+</span>
+
+<style>
+  .logo {
+    --fill: var(--logo-grad);
+    --word: currentColor;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--size) * 0.22);
+  }
+
+  .logo[data-tone='white'] { --fill: #fff; }
+  .logo[data-tone='ink'] { --fill: var(--ink); }
+  .logo[data-tone='blue'] { --fill: var(--blue); }
+
+  .logo__mono {
+    flex: none;
+    width: var(--size);
+    aspect-ratio: 1;
+    background: var(--fill);
+    mask: var(--mask) center / contain no-repeat;
+  }
+
+  .logo__word {
+    height: calc(var(--size) * 0.86);
+    width: auto;
+    color: var(--word);
+  }
+</style>

@@ -1,0 +1,630 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Logo from '../components/Logo.astro';
+import Presa from '../components/Presa.astro';
+import Cinta from '../components/Cinta.astro';
+import Beta from '../components/Beta.astro';
+import LedBoard from '../components/LedBoard.astro';
+import FichaVia from '../components/FichaVia.astro';
+import Pegatina from '../components/Pegatina.astro';
+import Colchoneta from '../components/Colchoneta.astro';
+import Autobelay from '../components/Autobelay.astro';
+import { problems, circuitos, tarifas, info } from '../data/rw';
+
+import deEspaldas from '../assets/img/de-espaldas.webp';
+import kilter from '../assets/img/kilterboard.webp';
+import tercerHangar from '../assets/img/tercer-hangar.webp';
+
+const colores = [
+  { name: 'Pared', hex: '#EEEFEB', v: '--wall', from: 'Paneles de resina gris claro' },
+  { name: 'Azul RW', hex: '#2B95DC', v: '--blue', from: 'Bandas pintadas y monograma del muro' },
+  { name: 'Naranja logo', hex: '#F47A20', v: '--orange', from: 'Degradado del círculo RW' },
+  { name: 'Rojo logo', hex: '#E33B2C', v: '--red', from: 'Final del degradado' },
+  { name: 'Volumen', hex: '#121417', v: '--ink', from: 'Volúmenes negros y texto' },
+  { name: 'Noche', hex: '#090C12', v: '--night', from: 'Sala de la Moon y la Kilter' },
+];
+---
+
+<Base title="Del muro a la web · Rock & Wall">
+  <Autobelay />
+
+  <header class="lab-top container">
+    <Logo size="46px" />
+    <span class="kicker">Sistema visual · demo</span>
+  </header>
+
+  <!-- Intro -->
+  <section class="wall lab-intro">
+    <div class="container">
+      <p class="kicker"><span class="coord">A1</span> Rock &amp; Wall · sistema visual</p>
+      <h1 class="display lab-intro__title">Del muro<br /><span>a la web.</span></h1>
+      <p class="lead lab-intro__lead">
+        Cada pieza de esta web existe en la sala: la rejilla de tornillos, las presas, la cinta de salida, las bandas
+        azules, los LEDs de la Kilter y la colchoneta. Aquí están juntas antes de montar la home.
+      </p>
+    </div>
+  </section>
+
+  <!-- 01 Color -->
+  <section class="section lab-block">
+    <div class="container lab-grid">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">B2</span> Color</p>
+        <h2 class="h2">Sacado de la sala</h2>
+        <p>
+          Nada de marrón ni de madera: Rock &amp; Wall es pared clara, azul pintado y el naranja del logo. Los colores de
+          las presas se guardan para lo que en la sala también tiene color: grados, avisos y botones.
+        </p>
+      </div>
+      <ul class="swatches">
+        {
+          colores.map((c) => (
+            <li class="swatch" style={`--c:var(${c.v})`}>
+              <span class="swatch__chip" />
+              <strong>{c.name}</strong>
+              <code>{c.hex}</code>
+              <small>{c.from}</small>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 Tipografía -->
+  <section class="section wall wall--grey lab-block">
+    <div class="container">
+      <p class="kicker"><span class="coord">C3</span> Tipografía</p>
+      <p class="display type-hero">Sube.<br /><span class="o">Caes.</span><br />Vuelves.</p>
+      <div class="type-row">
+        <div>
+          <p class="kicker">Rótulos · Archivo estrecha, 900</p>
+          <p class="h3">500 m² de bloque en tres salas</p>
+        </div>
+        <div>
+          <p class="kicker">Texto · Archivo, 400</p>
+          <p>Bloques para todos los niveles, desde muy fácil hasta nivel galáctico. Problemas nuevos cada día.</p>
+        </div>
+        <div>
+          <p class="kicker">Rotulador · como en la cinta</p>
+          <p class="hand type-hand">Nuevos bloques</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Presas -->
+  <section class="section wall lab-block">
+    <div class="container lab-grid">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">D4</span> Botones</p>
+        <h2 class="h2">Presas</h2>
+        <p>
+          Resina con volumen, sombra sobre la pared y el tornillo como icono. Al pasar el ratón se llenan de magnesio; al
+          pulsar, se hunden un poco, como al cargar el peso.
+        </p>
+      </div>
+      <div class="presas-demo">
+        <Presa href={info.reservar} external>Prueba la escalada</Presa>
+        <Presa href="#tarifas" color="blue" shape="sloper" rot={2} icon="down">Ver tarifas</Presa>
+        <Presa href={info.reservar} color="yellow" shape="crimp" rot={-4} external icon="out">Reservar</Presa>
+        <Presa href="#" color="ink" rot={1}>Instalaciones</Presa>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Cinta -->
+  <section class="section lab-block">
+    <div class="container lab-grid">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">E5</span> Etiquetas</p>
+        <h2 class="h2">Cinta de salida</h2>
+        <p>
+          La cinta escrita a rotulador que marca dónde empieza cada bloque. En la web señala lo nuevo, los grados y los
+          circuitos de color.
+        </p>
+      </div>
+      <div>
+        <div class="cintas-demo">
+          <Cinta>Nuevo</Cinta>
+          <Cinta color="white" rot={2}>6a+</Cinta>
+          <Cinta color="green" rot={-1}>Salida</Cinta>
+          <Cinta color="red" size="lg" rot={3}>¡Top!</Cinta>
+        </div>
+        <p class="kicker circuitos-title">Circuitos de bloque</p>
+        <ol class="circuitos">
+          {
+            circuitos.map((c, i) => (
+              <li>
+                <Cinta color={c.color} rot={i % 2 ? 2 : -2} size="sm">
+                  {c.label}
+                </Cinta>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="nota">* Orden de colores provisional: hay que confirmarlo con el equipo de equipadores.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Pared -->
+  <section class="section lab-block lab-wall">
+    <div class="container lab-grid">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">F6</span> Fondos</p>
+        <h2 class="h2">La pared</h2>
+        <p>
+          El fondo es un panel: rejilla de tornillos al tresbolillo, grano de resina y juntas cada ocho agujeros. Las
+          secciones de marca van en el azul de las bandas pintadas.
+        </p>
+      </div>
+      <div class="wall-compare">
+        <div class="wall-compare__photo">
+          <Foto src={tercerHangar} alt="Pared del tercer hangar con presas y bandas azules" sizes="(min-width: 900px) 30vw, 90vw" widths={[600, 900]} />
+        </div>
+        <div class="wall wall-compare__tile"><span class="hand">Pared</span></div>
+        <div class="wall wall--blue wall-compare__tile"><span class="hand">Banda azul</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Beta -->
+  <section class="section wall lab-block">
+    <div class="container lab-grid lab-grid--media">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">G7</span> Fotos</p>
+        <h2 class="h2">La beta</h2>
+        <p>
+          Fotos reales con las presas marcadas a rotulador y la secuencia dibujada, como cuando alguien te explica un
+          bloque señalando la pared. Se dibuja al entrar en pantalla.
+        </p>
+        <ul class="beta-legend">
+          <li><i style="--c:var(--led-start)"></i>Salida</li>
+          <li><i style="--c:#ffe14a"></i>Manos</li>
+          <li><i style="--c:var(--led-foot)"></i>Pies</li>
+          <li><i style="--c:var(--led-top)"></i>Top</li>
+        </ul>
+      </div>
+      <Beta
+        image={deEspaldas}
+        alt="Escaladora de espaldas resolviendo un bloque sobre la pared gris"
+        points={[
+          { x: 300, y: 440, kind: 'start', n: 1 },
+          { x: 738, y: 548, kind: 'hand', n: 2 },
+          { x: 760, y: 800, kind: 'foot' },
+          { x: 420, y: 1080, kind: 'foot' },
+          { x: 505, y: 385, kind: 'hand', n: 3, r: 7 },
+          { x: 800, y: 292, kind: 'hand', n: 4, r: 6.5 },
+          { x: 510, y: 180, kind: 'top', n: 'Top', r: 8 },
+        ]}
+        class="lab-beta"
+      />
+    </div>
+  </section>
+
+  <!-- 07 Noche -->
+  <section class="section night lab-block lab-night">
+    <div class="container lab-grid lab-grid--media">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">H8</span> Modo noche</p>
+        <h2 class="h2">Se enciende<br />la pared</h2>
+        <p>
+          La cara oscura de Rock &amp; Wall: Moon Board y Kilter Board. La tabla se ilumina presa a presa con el código de
+          colores real de la Kilter. Prueba otro problema.
+        </p>
+        <Foto src={kilter} alt="Kilter Board de Rock & Wall con los LEDs encendidos" sizes="(min-width: 900px) 35vw, 90vw" widths={[600, 900]} class="lab-night__photo" />
+      </div>
+      <LedBoard problems={problems} class="lab-board" />
+    </div>
+  </section>
+
+  <!-- 08 Fichas -->
+  <section class="section wall lab-block" id="tarifas">
+    <div class="container">
+      <div class="lab-copy lab-copy--wide">
+        <p class="kicker"><span class="coord">I9</span> Tarifas</p>
+        <h2 class="h2">Fichas de vía</h2>
+        <p>
+          Cada tarifa es una vía, con su plaquita atornillada: número, grado, nombre y equipador. Cuanto más compromiso,
+          más grado, hasta el 8a, el techo del rocódromo. En vez de «Más popular», la que más se repite.
+        </p>
+      </div>
+      <div class="fichas">
+        {tarifas.map((t) => <FichaVia {...t} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Pegatinas -->
+  <section class="section lab-block">
+    <div class="container lab-grid">
+      <div class="lab-copy">
+        <p class="kicker"><span class="coord">J10</span> Comunidad</p>
+        <h2 class="h2">Pegatinas</h2>
+        <p>
+          Las taquillas del rocódromo están llenas de pegatinas. En la web sirven para los guiños: el aniversario, el
+          lema o el tardeo.
+        </p>
+      </div>
+      <div class="pegatinas">
+        <Pegatina ring="Climb more · Try again · Climb more · Try again ·" color="orange" rot={-10}>¡Otra!</Pegatina>
+        <Pegatina ring="Rock & Wall · Sevilla · 10 años escalando ·" color="blue" rot={6} size="170px">X</Pegatina>
+        <Pegatina ring="Nivel galáctico · Nivel galáctico ·" color="ink" rot={-4} size="140px">★</Pegatina>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Colchoneta -->
+  <Colchoneta>
+    <div class="foot">
+      <div class="foot__claim">
+        <p class="kicker"><span class="coord">K11</span> Pie de página</p>
+        <p class="display foot__title">Caes<br />aquí.</p>
+        <Presa href={info.reservar} color="orange" external rot={-2}>Y vuelves mañana</Presa>
+      </div>
+      <dl class="foot__info">
+        <div>
+          <dt>Horario</dt>
+          {info.horario.map((h) => <dd>{h}</dd>)}
+        </div>
+        <div>
+          <dt>Dónde</dt>
+          <dd><a href={info.mapa} target="_blank" rel="noopener">{info.direccion}</a></dd>
+        </div>
+        <div>
+          <dt>Síguenos</dt>
+          <dd>
+            <a href={info.instagram} target="_blank" rel="noopener">Instagram</a> ·
+            <a href={info.whatsapp} target="_blank" rel="noopener">WhatsApp</a> ·
+            <a href={info.facebook} target="_blank" rel="noopener">Facebook</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div class="foot__legal">
+      <Logo size="34px" tone="white" />
+      <span>© Rock &amp; Wall Climbing S.L.</span>
+    </div>
+  </Colchoneta>
+</Base>
+
+<style>
+  .lab-top {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 22px;
+  }
+
+  @media (max-width: 600px) {
+    .lab-top .kicker {
+      display: none;
+    }
+  }
+
+  .lab-intro {
+    padding: clamp(150px, 20vw, 240px) 0 clamp(80px, 10vw, 140px);
+  }
+
+  .lab-intro__title {
+    margin: 24px 0 32px;
+    font-size: clamp(4.4rem, 2rem + 11vw, 12.5rem);
+  }
+
+  .lab-intro__title span {
+    color: var(--blue);
+  }
+
+  .lab-intro__lead {
+    max-width: 38rem;
+  }
+
+  .lab-block {
+    border-top: 1px solid rgb(0 0 0 / 0.06);
+  }
+
+  .lab-grid {
+    display: grid;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .lab-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+    .lab-grid--media {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+
+  .lab-copy {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+    max-width: 30rem;
+  }
+
+  .lab-copy--wide {
+    max-width: 44rem;
+    margin-bottom: 64px;
+  }
+
+  /* Color */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 34px 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatch {
+    display: grid;
+    gap: 3px;
+    font-size: 0.9rem;
+  }
+
+  .swatch__chip {
+    width: 100%;
+    aspect-ratio: 1.35;
+    margin-bottom: 10px;
+    border-radius: 42% 58% 50% 50% / 60% 46% 54% 40%;
+    background: var(--grain), radial-gradient(120% 100% at 30% 20%, color-mix(in oklab, var(--c), white 18%), var(--c) 50%, color-mix(in oklab, var(--c), black 16%));
+    box-shadow:
+      inset 0 -8px 0 rgb(0 0 0 / 0.08),
+      0 14px 22px -14px rgb(0 0 0 / 0.5),
+      0 0 0 1px rgb(0 0 0 / 0.05);
+  }
+
+  .swatch code {
+    font-size: 0.78rem;
+    opacity: 0.6;
+  }
+
+  .swatch small {
+    opacity: 0.7;
+    line-height: 1.35;
+  }
+
+  /* Tipografía */
+  .type-hero {
+    margin: 28px 0 56px;
+    font-size: clamp(4.6rem, 2rem + 12vw, 13rem);
+  }
+
+  .type-hero .o {
+    color: var(--orange);
+  }
+
+  .type-row {
+    display: grid;
+    gap: 36px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .type-row .kicker {
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  .type-hand {
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--blue-deep);
+  }
+
+  /* Presas */
+  .presas-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 36px;
+    align-items: center;
+  }
+
+  /* Cintas */
+  .cintas-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 22px;
+    align-items: center;
+  }
+
+  .circuitos-title {
+    margin: 44px 0 16px;
+    opacity: 0.6;
+  }
+
+  .circuitos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nota {
+    margin-top: 18px;
+    font-size: 0.82rem;
+    opacity: 0.6;
+  }
+
+  /* Pared */
+  .wall-compare {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    min-height: 420px;
+  }
+
+  .wall-compare__photo {
+    grid-row: span 2;
+    min-height: 0;
+  }
+
+  .wall-compare__photo :global(picture),
+  .wall-compare__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .wall-compare__tile {
+    display: grid;
+    place-items: end start;
+    padding: 18px;
+    border-radius: 6px;
+    font-size: 1.3rem;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+  }
+
+  /* Beta */
+  :global(.lab-beta) {
+    max-width: 520px;
+    justify-self: center;
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
+  }
+
+  .beta-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .beta-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .beta-legend i {
+    width: 12px;
+    height: 12px;
+    border: 3px solid var(--c);
+    border-radius: 50%;
+  }
+
+  /* Noche */
+  .lab-night {
+    border-top: 0;
+  }
+
+  .lab-night .h2 {
+    color: #fff;
+  }
+
+  .lab-night p {
+    color: #b8c2d0;
+  }
+
+  .lab-night .kicker {
+    color: var(--led-hand);
+  }
+
+  .lab-night :global(.lab-night__photo img),
+  .lab-night :global(img.lab-night__photo) {
+    width: 100%;
+    border-radius: 6px;
+    opacity: 0.9;
+  }
+
+  :global(.lab-board) {
+    max-width: 520px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  /* Fichas */
+  .fichas {
+    display: grid;
+    gap: 36px 26px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    align-items: stretch;
+  }
+
+  /* Pegatinas */
+  .pegatinas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Pie */
+  .foot {
+    display: grid;
+    gap: 56px;
+  }
+
+  @media (min-width: 900px) {
+    .foot {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: end;
+    }
+  }
+
+  .foot__claim {
+    display: grid;
+    gap: 26px;
+    justify-items: start;
+  }
+
+  .foot__title {
+    font-size: clamp(4.4rem, 2rem + 9vw, 10rem);
+    color: #fff;
+    text-shadow: 0 3px 0 rgb(0 0 0 / 0.12);
+  }
+
+  .foot__info {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+  }
+
+  .foot__info dt {
+    margin-bottom: 4px;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .foot__info dd {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .foot__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 80px;
+    padding-top: 22px;
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+    font-size: 0.82rem;
+    opacity: 0.85;
+  }
+</style>

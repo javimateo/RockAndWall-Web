@@ -1,0 +1,318 @@
+---
+/**
+ * Tabla de entrenamiento con LEDs (Moon/Kilter): rejilla A-K × 1-18.
+ * Al entrar en pantalla se enciende un problema presa a presa con el código
+ * de colores de la Kilter: salida verde, manos cian, pies naranja y top magenta.
+ */
+import { rng, smooth } from '../lib/draw';
+
+type Role = 'start' | 'hand' | 'foot' | 'top';
+interface Problem {
+  name: string;
+  grade: string;
+  holds: Partial<Record<Role, string[]>>;
+}
+interface Props {
+  problems: Problem[];
+  class?: string;
+}
+
+const { problems, class: className } = Astro.props;
+
+const COLS = 'ABCDEFGHIJK'.split('');
+const ROWS = 18;
+const CELL = 10;
+const LEFT = 11;
+const TOP = 5;
+const W = LEFT + COLS.length * CELL + 5;
+const H = TOP + ROWS * CELL + 11;
+
+const used = new Set(problems.flatMap((p) => Object.values(p.holds).flat()));
+const rand = rng(2016);
+const woods = ['#c1935f', '#b3834f', '#cda06b'];
+
+const holds: { pos: string; x: number; y: number; d: string; fill: string; big: boolean }[] = [];
+COLS.forEach((col, c) => {
+  for (let r = 1; r <= ROWS; r++) {
+    const pos = `${col}${r}`;
+    const present = rand() > 0.2;
+    const shapeSeed = rand();
+    if (!present && !used.has(pos)) continue;
+    const x = LEFT + c * CELL + CELL / 2 + (rand() - 0.5) * 1.6;
+    const y = TOP + (ROWS - r) * CELL + CELL / 2 + (rand() - 0.5) * 1.6;
+    const big = shapeSeed > 0.86;
+    const base = big ? 4.1 : 2.4 + rand() * 1.3;
+    const rot = rand() * Math.PI * 2;
+    const pts: [number, number][] = [];
+    const n = 6;
+    for (let i = 0; i <= n + 2; i++) {
+      const a = rot + ((i % n) / n) * Math.PI * 2;
+      const rr = base * (0.75 + (((i % n) * 7919 + Math.floor(shapeSeed * 100)) % 10) / 28);
+      pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.82]);
+    }
+    const k = rand();
+    const fill = k < 0.45 ? woods[Math.floor(rand() * 3)] : k < 0.68 ? '#e9e6dc' : k < 0.88 ? '#2a2d33' : '#e8c43c';
+    holds.push({ pos, x, y, d: smooth(pts) + 'Z', fill, big });
+  }
+});
+
+const first = problems[0];
+---
+
+<div class:list={['board', className]} data-board data-reveal data-problems={JSON.stringify(problems)}>
+  <svg class="board__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="board-title">
+    <title id="board-title">Tabla de entrenamiento con un problema iluminado</title>
+    <defs>
+      <radialGradient id="board-shade" cx="50%" cy="35%" r="75%">
+        <stop offset="0" stop-color="#1c2433"></stop>
+        <stop offset="1" stop-color="#0d1119"></stop>
+      </radialGradient>
+    </defs>
+    <rect x={LEFT - 3} y={TOP - 3} width={COLS.length * CELL + 6} height={ROWS * CELL + 6} rx="2" fill="url(#board-shade)"></rect>
+    {
+      COLS.map((col, c) => (
+        <text class="board__label" x={LEFT + c * CELL + CELL / 2} y={H - 2.5} text-anchor="middle">
+          {col}
+        </text>
+      ))
+    }
+    {
+      Array.from({ length: ROWS }, (_, i) => (
+        <text class="board__label" x={LEFT - 5.5} y={TOP + i * CELL + CELL / 2 + 1.4} text-anchor="middle">
+          {ROWS - i}
+        </text>
+      ))
+    }
+    {
+      holds.map((h) => (
+        <g class="board__hold" data-pos={h.pos}>
+          <circle class="board__led" cx={h.x} cy={h.y} r={h.big ? 5.6 : 4.6} />
+          <path d={h.d} fill={h.fill} />
+          <circle cx={h.x} cy={h.y} r="0.55" fill="#0b0d11" opacity="0.8" />
+        </g>
+      ))
+    }
+  </svg>
+
+  <div class="board__info">
+    <p class="board__problem">
+      <span class="board__name hand" data-name>{first.name}</span>
+      <span class="board__grade" data-grade>{first.grade}</span>
+    </p>
+    <ul class="board__legend" aria-label="Código de colores">
+      <li data-role="start">Salida</li>
+      <li data-role="hand">Manos</li>
+      <li data-role="foot">Pies</li>
+      <li data-role="top">Top</li>
+    </ul>
+    <button class="board__next" type="button" data-next>
+      Otro problema <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  type Role = 'start' | 'hand' | 'foot' | 'top';
+  type Problem = { name: string; grade: string; holds: Partial<Record<Role, string[]>> };
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-board]').forEach((board) => {
+    const problems: Problem[] = JSON.parse(board.dataset.problems ?? '[]');
+    const nameEl = board.querySelector<HTMLElement>('[data-name]')!;
+    const gradeEl = board.querySelector<HTMLElement>('[data-grade]')!;
+    const holdEl = (pos: string) => board.querySelector<SVGGElement>(`[data-pos="${pos}"]`);
+    let index = 0;
+    let timers: number[] = [];
+
+    const clear = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      board.querySelectorAll('.is-lit').forEach((el) => {
+        el.classList.remove('is-lit');
+        el.removeAttribute('data-role');
+      });
+    };
+
+    const light = (p: Problem) => {
+      clear();
+      nameEl.textContent = p.name;
+      gradeEl.textContent = p.grade;
+      // Orden de encendido: salida, pies, manos de abajo arriba y top
+      const rowOf = (pos: string) => Number(pos.slice(1));
+      const seq: [string, Role][] = [
+        ...(p.holds.start ?? []).map((pos) => [pos, 'start'] as [string, Role]),
+        ...(p.holds.foot ?? []).map((pos) => [pos, 'foot'] as [string, Role]),
+        ...(p.holds.hand ?? []).sort((a, b) => rowOf(a) - rowOf(b)).map((pos) => [pos, 'hand'] as [string, Role]),
+        ...(p.holds.top ?? []).map((pos) => [pos, 'top'] as [string, Role]),
+      ];
+      seq.forEach(([pos, role], i) => {
+        const on = () => {
+          const el = holdEl(pos);
+          if (!el) return;
+          el.dataset.role = role;
+          el.classList.add('is-lit');
+        };
+        if (reduce) on();
+        else timers.push(window.setTimeout(on, 160 * i));
+      });
+    };
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          light(problems[index]);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(board);
+
+    board.querySelector('[data-next]')?.addEventListener('click', () => {
+      index = (index + 1) % problems.length;
+      light(problems[index]);
+    });
+  });
+</script>
+
+<style>
+  .board {
+    --start: var(--led-start);
+    --hand: var(--led-hand);
+    --foot: var(--led-foot);
+    --top: var(--led-top);
+    display: grid;
+    gap: 20px;
+  }
+
+  .board__svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .board__label {
+    fill: #5d6879;
+    font-family: var(--f-display);
+    font-size: 3.4px;
+    font-weight: 700;
+  }
+
+  .board__hold path {
+    filter: brightness(0.5) saturate(0.8);
+    transition: filter 0.4s var(--ease-out);
+  }
+
+  .board__led {
+    fill: none;
+    stroke: #2a3445;
+    stroke-width: 0.6;
+    transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s;
+  }
+
+  .board__hold.is-lit path {
+    filter: brightness(1.05);
+  }
+
+  .board__hold.is-lit .board__led {
+    stroke: var(--led);
+    stroke-width: 1.3;
+    filter: drop-shadow(0 0 1.2px var(--led)) drop-shadow(0 0 4px var(--led));
+    animation: led-on 0.5s var(--ease-out);
+  }
+
+  .board__hold[data-role='start'] { --led: var(--start); }
+  .board__hold[data-role='hand'] { --led: var(--hand); }
+  .board__hold[data-role='foot'] { --led: var(--foot); }
+  .board__hold[data-role='top'] { --led: var(--top); }
+
+  @keyframes led-on {
+    0% { stroke-width: 3; opacity: 0.2; }
+    60% { opacity: 1; }
+  }
+
+  .board__info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 24px;
+  }
+
+  .board__problem {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .board__name {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+
+  .board__grade {
+    padding: 0.2em 0.55em;
+    border: 1.5px solid currentColor;
+    border-radius: 6px;
+    color: var(--led-start);
+    font-family: var(--f-display);
+    font-stretch: 80%;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .board__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #aab4c3;
+  }
+
+  .board__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .board__legend li::before {
+    content: '';
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid var(--c);
+    box-shadow: 0 0 8px var(--c);
+  }
+
+  .board__legend [data-role='start'] { --c: var(--start); }
+  .board__legend [data-role='hand'] { --c: var(--hand); }
+  .board__legend [data-role='foot'] { --c: var(--foot); }
+  .board__legend [data-role='top'] { --c: var(--top); }
+
+  .board__next {
+    padding: 0.8em 1.2em;
+    border: 1.5px solid #3a4558;
+    border-radius: 999px;
+    background: transparent;
+    color: #fff;
+    font-family: var(--f-display);
+    font-stretch: 85%;
+    font-weight: 750;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .board__next:hover {
+    border-color: var(--led-hand);
+    background: rgb(47 216 245 / 0.08);
+  }
+</style>
