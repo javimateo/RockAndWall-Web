@@ -1,0 +1,80 @@
+---
+/** Selector flotante para enseñar las versiones de la demo una detrás de otra. */
+interface Props {
+  current: 'base' | 'pro' | 'clasica' | 'mixta';
+}
+
+const { current } = Astro.props;
+const versions = [
+  { id: 'base', href: '/', label: 'Base' },
+  { id: 'pro', href: '/pro', label: 'Profesional' },
+  { id: 'clasica', href: '/clasica', label: 'Clásica' },
+  { id: 'mixta', href: '/mixta', label: 'Mixta' },
+];
+---
+
+<nav class="selector" aria-label="Versiones de la demo">
+  <span class="selector__label">Versión</span>
+  {
+    versions.map((v) => (
+      <a href={v.href} aria-current={v.id === current ? 'page' : undefined}>
+        {v.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .selector {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px;
+    translate: -50% 0;
+    border-radius: 999px;
+    background: rgb(18 20 23 / 0.88);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
+    font-family: var(--f-display);
+    font-size: 0.76rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .selector__label {
+    padding: 0 10px 0 12px;
+    color: rgb(255 255 255 / 0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.66rem;
+  }
+
+  .selector a {
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .selector a:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .selector a[aria-current='page'] {
+    background: #fff;
+    color: var(--ink);
+  }
+
+  @media (max-width: 480px) {
+    .selector__label {
+      display: none;
+    }
+    .selector a {
+      padding: 8px 10px;
+    }
+  }
+</style>

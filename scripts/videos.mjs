@@ -30,11 +30,13 @@ const jobs = [
   encode(general, 'hero-560.mp4', { from: 30, duration: 12, width: 560, crf: 29, crop: PORTRAIT }),
   // Primer fotograma como imagen: Astro la sirve en AVIF/WebP mientras llega el vídeo
   poster(general, 'hero-poster.jpg', { at: 30, width: 1000, crop: PORTRAIT, dir: 'src/assets/img' }),
+  // Panorámica para las portadas a pantalla completa (en móvil se usa la vertical)
+  encode(general, 'hero-wide.mp4', { from: 30, duration: 12, width: 1600, crf: 31 }),
+  poster(general, 'hero-wide.jpg', { at: 30, width: 1920, dir: 'src/assets/img' }),
   encode('Nuevo Bloque.mp4', 'nuevo-bloque.mp4', { from: 0, duration: 23, width: 540, crf: 27 }),
   poster('Nuevo Bloque.mp4', 'nuevo-bloque-poster.jpg', { at: 3, width: 540 }),
   encode('Video Tardeo.mp4', 'tardeo.mp4', { from: 0, duration: 9, width: 1280, crf: 28 }),
   poster('Video Tardeo.mp4', 'tardeo-poster.jpg', { at: 1, width: 1280 }),
-  encode('Rock-And-Wall-AutoBelay_V2-2.mov', 'autobelay.mp4', { from: 4, duration: 8, width: 1280, crf: 28 }),
 ];
 
 for (const args of jobs) {

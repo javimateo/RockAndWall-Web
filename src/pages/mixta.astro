@@ -1,0 +1,1247 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Logo from '../components/Logo.astro';
+import Boton from '../components/Boton.astro';
+import Beta from '../components/Beta.astro';
+import Carrusel from '../components/Carrusel.astro';
+import VideoFondo from '../components/VideoFondo.astro';
+import PieSobrio from '../components/PieSobrio.astro';
+import SelectorVersion from '../components/SelectorVersion.astro';
+import { circuitos, tarifas, info } from '../data/rw';
+
+import heroWide from '../assets/img/hero-wide.jpg';
+import hangar1 from '../assets/img/hangar-1.webp';
+import zonaVias from '../assets/img/zona-vias.webp';
+import autobelay3 from '../assets/img/autobelay-3.webp';
+import vistaGeneral from '../assets/img/vista-general.webp';
+import tercerHangar from '../assets/img/tercer-hangar.webp';
+import autobelay2 from '../assets/img/autobelay-2.webp';
+import hombreDesplome from '../assets/img/hombre-desplome.webp';
+import gimnasio from '../assets/img/gimnasio.webp';
+import deEspaldas from '../assets/img/de-espaldas.webp';
+import hombreAutobelay from '../assets/img/hombre-autobelay.webp';
+import hombreEscalando from '../assets/img/hombre-escalando.webp';
+import moonwallInclinada from '../assets/img/moonwall-inclinada.webp';
+import kilter from '../assets/img/kilterboard.webp';
+import moonwall from '../assets/img/moonwall.webp';
+import escuelaInfantil from '../assets/img/escuela-infantil.webp';
+import colegio1 from '../assets/img/colegio-1.webp';
+import colegio3 from '../assets/img/colegio-3.webp';
+import colegio5 from '../assets/img/colegio-5.webp';
+import claseEscalada from '../assets/img/clase-escalada.webp';
+import slab from '../assets/img/slab.webp';
+
+const sala = [
+  { img: hangar1, alt: 'Hangar 1 renovado, con los muros de bloque y la pasarela', caption: 'Hangar 1' },
+  { img: zonaVias, alt: 'Zona de vías vista desde la entrada', caption: 'Zona de vías' },
+  { img: autobelay3, alt: 'Muro de vías con el monograma RW y los autobelays', caption: 'Muro del autobelay' },
+  { img: vistaGeneral, alt: 'Zona de bloque con volúmenes y bandas azules', caption: 'Zona de bloque' },
+  { img: tercerHangar, alt: 'Tercer hangar con las bandas azules', caption: 'Tercer hangar' },
+  { img: hombreDesplome, alt: 'Escalador en un desplome del hangar 1', caption: 'Desplomes' },
+  { img: autobelay2, alt: 'Vías con presas de colores y bandas azules', caption: 'Vías' },
+  { img: gimnasio, alt: 'Zona de gimnasio y entrenamiento', caption: 'Gimnasio' },
+];
+
+const cursos = [
+  { img: claseEscalada, alt: 'Grupo en una clase de escalada en la zona de vías', t: 'Clases de escalada', d: 'Para aprender técnica y seguridad con monitor.' },
+  { img: colegio1, alt: 'Alumnos de un colegio escalando con cuerda', t: 'Colegios e institutos', d: 'Cursos y salidas escolares en el rocódromo.' },
+  { img: escuelaInfantil, alt: 'Niña escalando un bloque con volúmenes', t: 'Escuela infantil', d: 'Escalada para peques, a su ritmo.' },
+];
+
+const hex: Record<string, string> = {
+  green: 'var(--h-green)',
+  yellow: 'var(--h-yellow)',
+  blue: 'var(--h-blue)',
+  orange: 'var(--h-orange)',
+  red: 'var(--h-red)',
+  black: '#1b1c1f',
+  white: '#e2e1d9',
+};
+
+const cifras = [
+  { n: '+500', u: 'm²', t: 'de bloque' },
+  { n: '+80', u: '', t: 'vías con cuerda' },
+  { n: '2', u: '', t: 'tablas: Moon y Kilter' },
+  { n: '7', u: 'días', t: 'abierto toda la semana' },
+];
+
+const pasos = [
+  { t: 'Regístrate', d: 'Rellena el registro online antes de tu primera visita.', href: info.registro, cta: 'Registro' },
+  { t: 'Reserva', d: 'Elige día y hora. Así te aseguras la entrada.', href: info.reservar, cta: 'Reservar' },
+  { t: 'Ven y escala', d: 'Con ropa cómoda. Pies de gato y arnés se alquilan aquí por 3 € cada uno.' },
+];
+---
+
+<Base title="Rock & Wall Climbing · Rocódromo en Sevilla">
+  <div class="mx">
+    <header class="nav">
+      <a href="/mixta" class="nav__logo"><Logo size="44px" tone="white" /></a>
+      <nav class="nav__links" aria-label="Principal">
+        <a href="#sala">La sala</a>
+        <a href="#escalar">Bloque y vías</a>
+        <a href="#tablas">Tablas</a>
+        <a href="#cursos">Cursos</a>
+        <a href="#tarifas">Tarifas</a>
+        <a href="#primera-vez">Primera vez</a>
+      </nav>
+      <Boton href={info.reservar} tone="blue" shape="offset" external>Reservar</Boton>
+    </header>
+
+    <!-- Portada -->
+    <section class="hero">
+      <VideoFondo
+        class="hero__bg"
+        poster={heroWide}
+        alt="Muros de bloque de Rock & Wall con bandas azules"
+        src="/video/hero-wide.mp4"
+        srcSm="/video/hero-560.mp4"
+      />
+      <div class="container hero__content">
+        <p class="label">Rocódromo · Sevilla</p>
+        <h1 class="hero__title">
+          <span class="line"><span class="w">Sube.</span></span>
+          <span class="line"><span class="w w--o">Caes.</span></span>
+          <span class="line"><span class="w">Vuelves.</span></span>
+        </h1>
+        <div class="hero__foot">
+          <p>El mayor rocódromo de Andalucía: más de 500 m² de bloque, más de 80 vías, Moon Board y Kilter Board.</p>
+          <div class="actions">
+            <Boton href={info.reservar} tone="blue" shape="offset" size="lg" external>Reserva tu sesión</Boton>
+            <Boton href="#tarifas" tone="white" variant="outline" shape="offset" size="lg" icon="down">Tarifas</Boton>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Banda azul pintada, con la rejilla de tornillos -->
+    <section class="wall wall--blue banda" aria-label="Rock & Wall en cifras">
+      <ul class="container cifras">
+        {
+          cifras.map((c) => (
+            <li>
+              <strong>
+                {c.n}
+                {c.u && <small>{c.u}</small>}
+              </strong>
+              <span>{c.t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- La sala -->
+    <section class="sec sec--paper sala" id="sala">
+      <div class="container sala__head">
+        <div>
+          <p class="label label--dark">01 · La sala</p>
+          <h2 class="h">Tres hangares para escalar</h2>
+        </div>
+        <div class="sala__intro">
+          <p>
+            Bloque para todos los niveles, vías con cuerda y autobelay, tablas de entrenamiento y zona de gimnasio. Todo
+            bajo el mismo techo, en Calle Labrador 8.
+          </p>
+          <Boton href={info.reservar} tone="ink" shape="offset" external>Ven a conocerla</Boton>
+        </div>
+      </div>
+      <Carrusel items={sala} label="Fotos de la sala: arrastra o usa las flechas" />
+    </section>
+
+    <!-- Bloque y vías -->
+    <section class="split split--ink split--rev" id="escalar">
+      <div class="split__media split__media--beta">
+        <Beta
+          image={deEspaldas}
+          alt="Escaladora resolviendo un bloque con la secuencia marcada sobre la foto"
+          sizes="(min-width: 900px) 50vw, 100vw"
+          cropBottom={300}
+          points={[
+            { x: 300, y: 440, kind: 'start', n: 1 },
+            { x: 738, y: 548, kind: 'hand', n: 2 },
+            { x: 760, y: 800, kind: 'foot' },
+            { x: 420, y: 1080, kind: 'foot' },
+            { x: 505, y: 385, kind: 'hand', n: 3, r: 7 },
+            { x: 800, y: 292, kind: 'hand', n: 4, r: 6.5 },
+            { x: 510, y: 180, kind: 'top', n: 'Top', r: 8 },
+          ]}
+          class="beta-full"
+        />
+      </div>
+      <div class="split__body">
+        <p class="label">02 · Bloque y vías</p>
+        <h2 class="h">Cada color, un nivel</h2>
+        <p>
+          Los bloques se organizan en circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado
+          francés. Si vienes sin compañero, el autobelay te asegura.
+        </p>
+        <ul class="legend">
+          {
+            circuitos.map((c) => (
+              <li>
+                <i style={`--c:${hex[c.color]}`} />
+                {c.label}
+              </li>
+            ))
+          }
+        </ul>
+        <div class="duo">
+          <figure>
+            <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 20vw, 45vw" widths={[400, 700]} />
+            <figcaption>Autobelay</figcaption>
+          </figure>
+          <figure>
+            <Foto src={hombreEscalando} alt="Escalador en una vía con cuerda" sizes="(min-width: 900px) 20vw, 45vw" widths={[400, 700]} />
+            <figcaption>Vías</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tablas -->
+    <section class="board" id="tablas">
+      <Foto src={moonwallInclinada} alt="Moon Board inclinada con los LEDs encendidos" sizes="100vw" class="board__bg" />
+      <div class="container board__grid">
+        <div class="board__copy">
+          <p class="label">03 · Tablas</p>
+          <h2 class="h">Se enciende la pared</h2>
+          <p>
+            Moon Board y Kilter Board: dos tablas iluminadas para entrenar fuerza con problemas de todo el mundo. Eliges
+            uno en la app y se encienden sus presas.
+          </p>
+        </div>
+        <div class="board__thumbs">
+          <figure>
+            <Foto src={kilter} alt="Kilter Board con los LEDs encendidos" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Kilter Board</figcaption>
+          </figure>
+          <figure>
+            <Foto src={moonwall} alt="Detalle de las presas de la Moon Board" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Moon Board</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Novedades en Instagram -->
+    <section class="sec ig" id="novedades">
+      <div class="container ig__grid">
+        <div class="ig__copy">
+          <p class="label label--dark">04 · Cada semana</p>
+          <h2 class="h">Bloques y vías nuevos cada semana</h2>
+          <p>
+            Cada semana se cambian varios bloques y vías, y lo avisamos en Instagram: qué se ha abierto, en qué zona y de
+            qué color. Síguenos para no perderte ninguno.
+          </p>
+          <Boton href={info.instagram} tone="ink" shape="offset" icon="out" external>@rockandwallclimbing</Boton>
+        </div>
+        <figure class="ig__reel">
+          <video muted loop playsinline preload="none" data-src="/video/nuevo-bloque.mp4" data-poster="/video/nuevo-bloque-poster.jpg" aria-label="Equipador montando un bloque nuevo"></video>
+          <figcaption>Nuevo bloque</figcaption>
+        </figure>
+        <div class="ig__posts">
+          {
+            [
+              { img: colegio5, alt: 'Bloque con volúmenes y presas de colores' },
+              { img: hombreDesplome, alt: 'Escalador en un desplome' },
+              { img: colegio3, alt: 'Vía en el muro del monograma RW' },
+              { img: autobelay2, alt: 'Vías con presas nuevas' },
+            ].map((p) => (
+              <a href={info.instagram} target="_blank" rel="noopener" class="ig__post">
+                <Foto src={p.img} alt={p.alt} sizes="(min-width: 900px) 16vw, 45vw" widths={[320, 640]} />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Primera vez: sobre la pared -->
+    <section class="wall first" id="primera-vez">
+      <div class="container first__grid">
+        <div>
+          <p class="label label--dark">05 · Primera vez</p>
+          <h2 class="h">Tu primer día en tres pasos</h2>
+          <ol class="steps">
+            {
+              pasos.map((p, i) => (
+                <li>
+                  <span class="steps__n">{i + 1}</span>
+                  <div>
+                    <h3>{p.t}</h3>
+                    <p>{p.d}</p>
+                    {p.href && (
+                      <a href={p.href} target="_blank" rel="noopener">
+                        {p.cta} →
+                      </a>
+                    )}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <figure class="first__photo">
+          <Foto src={slab} alt="Escaladora en una placa de bloque" sizes="(min-width: 900px) 34vw, 100vw" widths={[480, 800, 1080]} />
+        </figure>
+      </div>
+    </section>
+
+    <!-- Cursos y grupos -->
+    <section class="sec cursos" id="cursos">
+      <div class="container">
+        <div class="head">
+          <div>
+            <p class="label">06 · Cursos y grupos</p>
+            <h2 class="h">Aprende a escalar</h2>
+            <p>Clases de escalada, cursos para colegios e institutos y escuela infantil. Escríbenos y te contamos horarios y precios.</p>
+          </div>
+          <Boton href={info.whatsapp} tone="white" shape="offset" icon="out" external>Pregunta por WhatsApp</Boton>
+        </div>
+        <div class="cursos__grid">
+          {
+            cursos.map((c) => (
+              <article class="curso">
+                <div class="curso__img">
+                  <Foto src={c.img} alt={c.alt} sizes="(min-width: 900px) 30vw, 100vw" widths={[480, 800]} />
+                </div>
+                <h3>{c.t}</h3>
+                <p>{c.d}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarifas: cada una con su grado -->
+    <section class="sec sec--paper" id="tarifas">
+      <div class="container">
+        <div class="head">
+          <div>
+            <p class="label label--dark">07 · Tarifas · verano 2026</p>
+            <h2 class="h">Elige tu vía</h2>
+            <p>Cada tarifa lleva su grado: cuanto más compromiso, más grado, hasta el 8a del bono anual.</p>
+          </div>
+          <Boton href={info.tarifas} variant="outline" shape="offset" icon="out" external>Todas las tarifas</Boton>
+        </div>
+        <div class="plans">
+          {
+            tarifas.map((t) => (
+              <article class:list={['plan', { 'plan--featured': 'featured' in t && t.featured }]}>
+                <header>
+                  <span class="plan__n">Vía {t.n}</span>
+                  <span class="plan__grade" style={`--c:${hex[t.color] ?? 'var(--ink)'};--t:${t.color === 'white' ? 'var(--ink)' : '#fff'}`}>
+                    {t.grade}
+                  </span>
+                </header>
+                <h3>{t.name}</h3>
+                <p class="plan__price">
+                  {t.price}
+                  <small>€ {'unit' in t && t.unit}</small>
+                </p>
+                <p class="plan__desc">{t.desc}</p>
+                <ul>
+                  {t.items.map((it) => (
+                    <li>{it}</li>
+                  ))}
+                </ul>
+                {'badge' in t && t.badge && <p class="plan__badge">{t.badge}</p>}
+                <Boton href={t.cta.href} tone={'featured' in t && t.featured ? 'white' : 'ink'} shape="offset" external class="plan__cta">
+                  {t.cta.label}
+                </Boton>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Tardeo -->
+    <section class="split split--ink" id="tardeo">
+      <figure class="split__media">
+        <video muted loop playsinline preload="none" data-src="/video/tardeo.mp4" data-poster="/video/tardeo-poster.jpg" aria-label="Terraza y barra de Rock & Wall por la tarde"></video>
+      </figure>
+      <div class="split__body">
+        <p class="label">08 · Tardeo</p>
+        <h2 class="h">Y después, tardeo</h2>
+        <p>
+          Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
+          llena de la gente con la que acabas de escalar.
+        </p>
+        <Boton href={info.instagram} tone="white" shape="offset" icon="out" external>Ver el ambiente</Boton>
+      </div>
+    </section>
+
+    <!-- Cierre -->
+    <section class="closing">
+      <div class="container closing__inner">
+        <h2 class="closing__title">Aquí empieza<br /><span>tu vía.</span></h2>
+        <div class="actions">
+          <Boton href={info.reservar} tone="blue" shape="offset" size="lg" external>Reservar sesión</Boton>
+          <Boton href={info.registro} tone="ink" variant="outline" shape="offset" size="lg" icon="out" external>Registrarme</Boton>
+        </div>
+      </div>
+    </section>
+
+    <PieSobrio shape="offset" />
+  </div>
+  <SelectorVersion current="mixta" />
+</Base>
+
+<style>
+  .mx {
+    --paper: #f3f3f0;
+    --line: rgb(18 20 23 / 0.12);
+    background: #fff;
+  }
+
+  .label {
+    color: rgb(255 255 255 / 0.75);
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .label--dark {
+    color: var(--blue-deep);
+  }
+
+  .h {
+    font-family: var(--f-display);
+    font-stretch: 64%;
+    font-weight: 880;
+    font-size: clamp(2.8rem, 1.4rem + 4.6vw, 5.8rem);
+    line-height: 0.88;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 20px;
+  }
+
+  .sec {
+    padding-block: clamp(80px, 10vw, 150px);
+  }
+
+  .sec--paper {
+    background: var(--paper);
+  }
+
+  /* ---------- Cabecera ---------- */
+  .nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 22px var(--gutter);
+    color: #fff;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    margin-right: auto;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 26px;
+    font-family: var(--f-display);
+    font-stretch: 115%;
+    font-weight: 650;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nav__links a {
+    text-decoration: none;
+    opacity: 0.85;
+  }
+
+  .nav__links a:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 1100px) {
+    .nav__links {
+      display: none;
+    }
+  }
+
+  /* ---------- Portada ---------- */
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: min(100svh, 980px);
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .hero :global(.hero__bg) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.5), transparent 22%),
+      linear-gradient(0deg, rgb(10 12 15 / 0.88), rgb(10 12 15 / 0.2) 60%, transparent);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 22px;
+    padding-block: 140px clamp(48px, 6vw, 80px);
+  }
+
+  .hero__title {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: clamp(4.2rem, 1rem + 10vw, 11rem);
+    line-height: 0.84;
+    text-transform: uppercase;
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.06em;
+    margin-block: -0.06em;
+  }
+
+  .w {
+    display: block;
+  }
+
+  .w--o {
+    color: var(--orange);
+  }
+
+  :global(html.js) .w {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both paused;
+  }
+
+  .line:nth-child(2) .w { animation-delay: 0.1s; }
+  .line:nth-child(3) .w { animation-delay: 0.2s; }
+
+  :global(html.is-ready) .w {
+    animation-play-state: running;
+  }
+
+  @keyframes rise {
+    from { transform: translateY(105%); }
+  }
+
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px 48px;
+    margin-top: 12px;
+    padding-top: 26px;
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+  }
+
+  .hero__foot p {
+    max-width: 30rem;
+    color: #dde1e6;
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+  }
+
+  /* ---------- Banda azul ---------- */
+  .banda {
+    position: relative;
+    z-index: 1;
+    margin-top: -3vw;
+    padding-block: clamp(64px, 7vw, 100px);
+    clip-path: polygon(0 3vw, 58% 0, 100% 2vw, 100% 100%, 0 100%);
+  }
+
+  .cifras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 32px 24px;
+    margin-block: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cifras li {
+    display: grid;
+    gap: 8px;
+  }
+
+  .cifras strong {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: clamp(3.4rem, 2rem + 3.6vw, 5.4rem);
+    line-height: 0.9;
+  }
+
+  .cifras small {
+    margin-left: 0.1em;
+    font-size: 0.42em;
+  }
+
+  .cifras span {
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Bloques partidos ---------- */
+  .split {
+    display: grid;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+      min-height: min(90vh, 860px);
+    }
+    .split--rev .split__media {
+      order: 2;
+    }
+  }
+
+  .split--paper {
+    background: var(--paper);
+  }
+
+  .split--ink {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .split__media {
+    margin: 0;
+    min-height: 70vw;
+    overflow: hidden;
+    background: #1b1d21;
+  }
+
+  @media (min-width: 900px) {
+    .split__media {
+      min-height: 0;
+    }
+  }
+
+  .split__media :global(picture),
+  .split__media > :global(picture img),
+  .split__media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* La beta mantiene su proporción para que los círculos sigan encima de las presas */
+  .split__media--beta {
+    min-height: 0;
+    background: var(--ink);
+  }
+
+  .split__media--beta :global(.beta-full) {
+    width: 100%;
+  }
+
+  .split__body {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(56px, 7vw, 110px) var(--gutter);
+  }
+
+  .split__body > p:not(.label) {
+    max-width: 32rem;
+    font-size: 1.08rem;
+  }
+
+  .split--paper .split__body > p:not(.label) {
+    color: var(--ink-2);
+  }
+
+  .split--ink .split__body > p:not(.label) {
+    color: #c9ced6;
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 12px 28px;
+    margin: 0;
+    padding: 20px 0 0;
+    border-top: 1px solid rgb(255 255 255 / 0.15);
+    list-style: none;
+    color: #e4e7eb;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 600px) {
+    .legend {
+      grid-template-columns: repeat(2, auto);
+    }
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .legend i {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  }
+
+  /* ---------- Tablas ---------- */
+  .board {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: min(92vh, 880px);
+    padding-block: 120px clamp(56px, 7vw, 96px);
+    overflow: hidden;
+    color: #fff;
+    background: #07090d;
+  }
+
+  .board :global(.board__bg),
+  .board :global(.board__bg img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(7 9 13 / 0.85), rgb(7 9 13 / 0.1) 70%);
+  }
+
+  .board__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 40px;
+    align-items: end;
+  }
+
+  @media (min-width: 900px) {
+    .board__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .board__copy {
+    display: grid;
+    gap: 22px;
+  }
+
+  .board__copy p:not(.label) {
+    max-width: 32rem;
+    color: #d3d8df;
+    font-size: 1.1rem;
+  }
+
+  .board__thumbs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .board__thumbs figure,
+  .duo figure,
+  .ig__reel {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .board__thumbs figure {
+    aspect-ratio: 4 / 3;
+  }
+
+  .board__thumbs :global(picture),
+  .board__thumbs :global(img),
+  .duo :global(picture),
+  .duo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .board__thumbs figcaption,
+  .duo figcaption,
+  .ig__reel figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 7px 12px;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: min(100%, 400px);
+    margin-top: 4px;
+  }
+
+  .duo figure {
+    aspect-ratio: 1;
+  }
+
+  /* ---------- La sala ---------- */
+  .sala {
+    overflow: hidden;
+  }
+
+  .sala__head {
+    display: grid;
+    gap: 24px 64px;
+    align-items: end;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+
+  @media (min-width: 900px) {
+    .sala__head {
+      grid-template-columns: 1.1fr 1fr;
+    }
+  }
+
+  .sala__head .h {
+    margin-top: 16px;
+  }
+
+  .sala__intro {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+
+  .sala__intro p {
+    max-width: 32rem;
+    color: var(--ink-2);
+    font-size: 1.08rem;
+  }
+
+  /* ---------- Novedades (Instagram) ---------- */
+  .ig__grid {
+    display: grid;
+    gap: 40px 16px;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .ig__grid {
+      grid-template-columns: 1.1fr 0.62fr 1fr;
+    }
+  }
+
+  .ig__copy {
+    display: grid;
+    gap: 22px;
+    justify-items: start;
+  }
+
+  .ig__copy p:not(.label) {
+    max-width: 30rem;
+    color: var(--ink-2);
+    font-size: 1.08rem;
+  }
+
+  .ig__reel {
+    max-width: 360px;
+  }
+
+  .ig__reel video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    background: #1b1d21;
+  }
+
+  .ig__posts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ig__post {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #1b1d21;
+  }
+
+  .ig__post :global(picture),
+  .ig__post :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-out), opacity 0.3s;
+  }
+
+  @media (hover: hover) {
+    .ig__post:hover :global(img) {
+      transform: scale(1.06);
+      opacity: 0.88;
+    }
+  }
+
+  /* ---------- Cursos ---------- */
+  .cursos {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .cursos .head p:not(.label) {
+    color: #c9ced6;
+  }
+
+  .cursos__grid {
+    display: grid;
+    gap: 36px 20px;
+  }
+
+  @media (min-width: 760px) {
+    .cursos__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .curso {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+
+  .curso__img {
+    aspect-ratio: 4 / 5;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .curso__img :global(picture),
+  .curso__img :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .curso:hover .curso__img :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  .curso h3 {
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 1.7rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .curso p {
+    color: #b9c0ca;
+  }
+
+  /* ---------- Primera vez ---------- */
+  .first {
+    padding-block: clamp(80px, 10vw, 150px);
+  }
+
+  .first__grid {
+    display: grid;
+    gap: 56px;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .first__grid {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    }
+  }
+
+  .first .h {
+    margin: 16px 0 40px;
+  }
+
+  .steps {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 22px 24px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.06), 0 16px 30px -24px rgb(0 0 0 / 0.4);
+  }
+
+  .steps__n {
+    color: var(--blue-deep);
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: 3rem;
+    line-height: 0.8;
+  }
+
+  .steps h3 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  .steps p {
+    margin-top: 4px;
+    color: var(--ink-2);
+  }
+
+  .steps a {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--blue-deep);
+    font-weight: 600;
+    text-underline-offset: 4px;
+  }
+
+  .first__photo {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.55);
+  }
+
+  .first__photo :global(picture),
+  .first__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Tarifas ---------- */
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+
+  .head > div {
+    display: grid;
+    gap: 16px;
+    max-width: 40rem;
+  }
+
+  .head p:not(.label) {
+    color: var(--ink-2);
+    font-size: 1.05rem;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 26px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .plan header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .plan__n {
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* Grado en una chapa del color de la vía */
+  .plan__grade {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    height: 30px;
+    padding: 0 8px;
+    background: var(--c);
+    color: var(--t);
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .plan h3 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+
+  .plan__price {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: 3.6rem;
+    line-height: 0.9;
+  }
+
+  .plan__price small {
+    margin-left: 4px;
+    font-stretch: 100%;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--ink-3);
+  }
+
+  .plan__desc {
+    color: var(--ink-2);
+  }
+
+  .plan ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.94rem;
+  }
+
+  .plan li {
+    padding-left: 20px;
+    background: linear-gradient(var(--blue-deep), var(--blue-deep)) 0 0.62em / 10px 2px no-repeat;
+  }
+
+  .plan__badge {
+    color: var(--orange);
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .plan :global(.plan__cta) {
+    justify-content: space-between;
+    margin: auto 5px 5px 0;
+  }
+
+  .plan--featured {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .plan--featured header {
+    border-bottom-color: rgb(255 255 255 / 0.15);
+  }
+
+  .plan--featured .plan__n,
+  .plan--featured .plan__desc,
+  .plan--featured .plan__price small {
+    color: #b9c0ca;
+  }
+
+  .plan--featured li {
+    background-image: linear-gradient(#7fc0ec, #7fc0ec);
+  }
+
+  /* ---------- Cierre ---------- */
+  .closing {
+    padding-block: clamp(80px, 10vw, 150px);
+    background: var(--paper);
+  }
+
+  .closing__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 36px;
+  }
+
+  .closing__title {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: clamp(3.6rem, 1rem + 8vw, 9rem);
+    line-height: 0.84;
+    text-transform: uppercase;
+  }
+
+  .closing__title span {
+    color: var(--blue-deep);
+  }
+</style>

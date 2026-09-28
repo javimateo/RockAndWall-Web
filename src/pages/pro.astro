@@ -1,0 +1,953 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Logo from '../components/Logo.astro';
+import Boton from '../components/Boton.astro';
+import VideoFondo from '../components/VideoFondo.astro';
+import PieSobrio from '../components/PieSobrio.astro';
+import SelectorVersion from '../components/SelectorVersion.astro';
+import { circuitos, tarifas, info } from '../data/rw';
+
+import heroPoster from '../assets/img/hero-poster.jpg';
+import autobelay from '../assets/img/autobelay.webp';
+import vistaGeneral from '../assets/img/vista-general.webp';
+import primerHangar from '../assets/img/primer-hangar.jpg';
+import tercerHangar from '../assets/img/tercer-hangar.webp';
+import gimnasio from '../assets/img/gimnasio.webp';
+import deEspaldas from '../assets/img/de-espaldas.webp';
+import moonwallInclinada from '../assets/img/moonwall-inclinada.webp';
+import kilter from '../assets/img/kilterboard.webp';
+import moonwall from '../assets/img/moonwall.webp';
+import slab from '../assets/img/slab.webp';
+
+const hex: Record<string, string> = {
+  green: 'var(--h-green)',
+  yellow: 'var(--h-yellow)',
+  blue: 'var(--h-blue)',
+  orange: 'var(--h-orange)',
+  red: 'var(--h-red)',
+  black: '#1b1c1f',
+};
+
+const cifras = [
+  { n: '+500 m²', t: 'de bloque' },
+  { n: '+80', t: 'vías con cuerda' },
+  { n: '2', t: 'tablas: Moon y Kilter' },
+  { n: '7 días', t: 'abierto toda la semana' },
+];
+
+const pasos = [
+  { t: 'Regístrate', d: 'Rellena el registro online antes de tu primera visita.', href: info.registro, cta: 'Ir al registro' },
+  { t: 'Reserva', d: 'Elige día y hora. Así te aseguras la entrada.', href: info.reservar, cta: 'Reservar' },
+  { t: 'Ven y escala', d: 'Con ropa cómoda. Pies de gato y arnés se alquilan aquí por 3 € cada uno.' },
+];
+---
+
+<Base title="Rock & Wall Climbing · Rocódromo en Sevilla">
+  <div class="pro">
+    <header class="nav">
+      <a href="/pro" class="nav__logo"><Logo size="42px" tone="white" /></a>
+      <nav class="nav__links" aria-label="Principal">
+        <a href="#sala">La sala</a>
+        <a href="#escalar">Bloque y vías</a>
+        <a href="#tablas">Tablas</a>
+        <a href="#tarifas">Tarifas</a>
+        <a href="#primera-vez">Primera vez</a>
+      </nav>
+      <Boton href={info.reservar} tone="blue" external>Reservar</Boton>
+    </header>
+
+    <!-- Portada partida: titular sobre tinta, vídeo a sangre -->
+    <section class="hero">
+      <div class="hero__panel">
+        <div class="hero__copy">
+          <p class="eyebrow">Rocódromo · Sevilla</p>
+          <h1 class="hero__title">
+            <span class="line"><span class="w">Sube.</span></span>
+            <span class="line"><span class="w">Caes.</span></span>
+            <span class="line"><span class="w">Vuelves.</span></span>
+          </h1>
+          <p class="hero__lead">
+            El mayor rocódromo de Andalucía: más de 500 m² de bloque, más de 80 vías, Moon Board y Kilter Board.
+          </p>
+          <div class="actions">
+            <Boton href={info.reservar} tone="blue" size="lg" external>Reserva tu sesión</Boton>
+            <Boton href="#tarifas" tone="white" variant="outline" size="lg" icon="down">Ver tarifas</Boton>
+          </div>
+        </div>
+      </div>
+      <VideoFondo
+        class="hero__video"
+        poster={heroPoster}
+        alt="Pared de Rock & Wall con presas de colores y bandas azules"
+        src="/video/hero-800.mp4"
+        srcSm="/video/hero-560.mp4"
+        sizes="(min-width: 900px) 50vw, 100vw"
+      />
+    </section>
+
+    <!-- Cifras -->
+    <section class="cifras" aria-label="Rock & Wall en cifras">
+      <ul class="container cifras__list">
+        {
+          cifras.map((c) => (
+            <li>
+              <strong>{c.n}</strong>
+              <span>{c.t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- La sala -->
+    <section class="sec sec--paper" id="sala">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow eyebrow--dark">01 · La sala</p>
+          <h2 class="h">Tres hangares para escalar</h2>
+          <p class="head__text">
+            Bloque para todos los niveles, vías con cuerda y autobelay, tablas de entrenamiento y zona de gimnasio. Todo
+            bajo el mismo techo, en Calle Labrador 8.
+          </p>
+        </div>
+        <div class="gallery">
+          <figure class="gallery__a">
+            <Foto src={autobelay} alt="Muro de vías con el monograma RW pintado y los autobelays" sizes="(min-width: 900px) 66vw, 100vw" />
+            <figcaption>Muro de vías y autobelay</figcaption>
+          </figure>
+          <figure class="gallery__b">
+            <Foto src={vistaGeneral} alt="Vista general de la zona de bloque" sizes="(min-width: 900px) 33vw, 100vw" widths={[480, 800, 1200]} />
+            <figcaption>Zona de bloque</figcaption>
+          </figure>
+          <figure class="gallery__c">
+            <Foto src={tercerHangar} alt="Tercer hangar con las bandas azules" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
+            <figcaption>Tercer hangar</figcaption>
+          </figure>
+          <figure class="gallery__d">
+            <Foto src={primerHangar} alt="Primer hangar de Rock & Wall" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
+            <figcaption>Primer hangar</figcaption>
+          </figure>
+          <figure class="gallery__e">
+            <Foto src={gimnasio} alt="Zona de gimnasio y entrenamiento" sizes="(min-width: 900px) 33vw, 100vw" widths={[480, 800]} />
+            <figcaption>Gimnasio</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bloque y vías -->
+    <section class="split split--ink" id="escalar">
+      <figure class="split__media">
+        <Foto src={deEspaldas} alt="Escaladora resolviendo un bloque sobre la pared gris" sizes="(min-width: 900px) 50vw, 100vw" widths={[600, 900, 1080]} />
+      </figure>
+      <div class="split__body">
+        <p class="eyebrow">02 · Bloque y vías</p>
+        <h2 class="h">Cada color, un nivel</h2>
+        <p>
+          Los bloques se organizan en circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado
+          francés. Si vienes sin compañero, el autobelay te asegura.
+        </p>
+        <ul class="legend">
+          {
+            circuitos.map((c) => (
+              <li>
+                <i style={`--c:${hex[c.color]}`} />
+                {c.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Tablas: foto a sangre -->
+    <section class="board" id="tablas">
+      <Foto src={moonwallInclinada} alt="Moon Board inclinada con los LEDs encendidos" sizes="100vw" class="board__bg" />
+      <div class="container board__grid">
+        <div class="board__copy">
+          <p class="eyebrow">03 · Tablas</p>
+          <h2 class="h">Moon Board y Kilter Board</h2>
+          <p>
+            Dos tablas iluminadas para entrenar fuerza con problemas de todo el mundo. Eliges uno en la app y se encienden
+            sus presas.
+          </p>
+        </div>
+        <div class="board__thumbs">
+          <figure>
+            <Foto src={kilter} alt="Kilter Board con los LEDs encendidos" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Kilter Board</figcaption>
+          </figure>
+          <figure>
+            <Foto src={moonwall} alt="Detalle de las presas de la Moon Board" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Moon Board</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Primera vez -->
+    <section class="sec" id="primera-vez">
+      <div class="container first">
+        <div>
+          <div class="head">
+            <p class="eyebrow eyebrow--dark">04 · Primera vez</p>
+            <h2 class="h">Tu primer día, en tres pasos</h2>
+          </div>
+          <ol class="steps">
+            {
+              pasos.map((p, i) => (
+                <li>
+                  <span class="steps__n">0{i + 1}</span>
+                  <h3>{p.t}</h3>
+                  <p>{p.d}</p>
+                  {p.href && (
+                    <a href={p.href} target="_blank" rel="noopener">
+                      {p.cta} →
+                    </a>
+                  )}
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <figure class="first__photo">
+          <Foto src={slab} alt="Escaladora en una placa de bloque" sizes="(min-width: 900px) 34vw, 100vw" widths={[480, 800, 1080]} />
+        </figure>
+      </div>
+    </section>
+
+    <!-- Tarifas -->
+    <section class="sec sec--paper" id="tarifas">
+      <div class="container">
+        <div class="head head--row">
+          <div>
+            <p class="eyebrow eyebrow--dark">05 · Tarifas · verano 2026</p>
+            <h2 class="h">Tarifas</h2>
+          </div>
+          <Boton href={info.tarifas} variant="outline" icon="out" external>Todas las tarifas</Boton>
+        </div>
+        <div class="plans">
+          {
+            tarifas.map((t) => (
+              <article class:list={['plan', { 'plan--featured': 'featured' in t && t.featured }]}>
+                <header>
+                  <h3>{t.name}</h3>
+                  {'badge' in t && t.badge && <span class="plan__badge">{t.badge}</span>}
+                </header>
+                <p class="plan__price">
+                  {t.price}
+                  <small>€ {'unit' in t && t.unit}</small>
+                </p>
+                <p class="plan__desc">{t.desc}</p>
+                <ul>
+                  {t.items.map((it) => (
+                    <li>{it}</li>
+                  ))}
+                </ul>
+                {'note' in t && t.note && <p class="plan__note">{t.note}</p>}
+                <Boton href={t.cta.href} tone={'featured' in t && t.featured ? 'white' : 'ink'} external class="plan__cta">
+                  {t.cta.label}
+                </Boton>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Tardeo: bloque de color sólido -->
+    <section class="split split--blue" id="tardeo">
+      <div class="split__body">
+        <p class="eyebrow">06 · Tardeo</p>
+        <h2 class="h">Y después, tardeo</h2>
+        <p>
+          Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
+          llena de la gente con la que acabas de escalar.
+        </p>
+        <Boton href={info.instagram} tone="white" icon="out" external>Ver el ambiente</Boton>
+      </div>
+      <figure class="split__media">
+        <video muted loop playsinline preload="none" data-src="/video/tardeo.mp4" data-poster="/video/tardeo-poster.jpg" aria-label="Terraza y barra de Rock & Wall por la tarde"></video>
+      </figure>
+    </section>
+
+    <!-- Cierre -->
+    <section class="closing">
+      <div class="container closing__inner">
+        <h2 class="h">Tu primera sesión empieza aquí</h2>
+        <div class="actions">
+          <Boton href={info.reservar} tone="blue" size="lg" external>Reservar sesión</Boton>
+          <Boton href={info.registro} tone="white" variant="outline" size="lg" icon="out" external>Registrarme</Boton>
+        </div>
+      </div>
+    </section>
+
+    <PieSobrio />
+  </div>
+  <SelectorVersion current="pro" />
+</Base>
+
+<style>
+  .pro {
+    --paper: #f3f3f0;
+    --line: rgb(18 20 23 / 0.12);
+    background: #fff;
+  }
+
+  .sec {
+    padding-block: clamp(80px, 10vw, 150px);
+  }
+
+  .sec--paper {
+    background: var(--paper);
+  }
+
+  .eyebrow {
+    margin-bottom: 18px;
+    color: rgb(255 255 255 / 0.7);
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow--dark {
+    color: var(--blue-deep);
+  }
+
+  .h {
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  /* ---------- Cabecera ---------- */
+  .nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 22px var(--gutter);
+    color: #fff;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    margin-right: auto;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 26px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .nav__links a {
+    text-decoration: none;
+    opacity: 0.85;
+  }
+
+  .nav__links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  @media (max-width: 1100px) {
+    .nav__links {
+      display: none;
+    }
+  }
+
+  /* ---------- Portada ---------- */
+  .hero {
+    display: grid;
+    min-height: min(100svh, 980px);
+    background: var(--ink);
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .hero__panel {
+    display: flex;
+    align-items: flex-end;
+    padding: 44px var(--gutter) 56px;
+    color: #fff;
+  }
+
+  @media (min-width: 900px) {
+    .hero__panel {
+      padding: 140px var(--gutter) clamp(56px, 7vw, 96px);
+    }
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 28px;
+    max-width: 36rem;
+  }
+
+  .hero__title {
+    font-family: var(--f-display);
+    font-stretch: 68%;
+    font-weight: 850;
+    font-size: clamp(4rem, 1.5rem + 7vw, 8.5rem);
+    line-height: 0.88;
+    text-transform: uppercase;
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.06em;
+    margin-block: -0.06em;
+  }
+
+  .w {
+    display: block;
+  }
+
+  :global(html.js) .w {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both paused;
+  }
+
+  .line:nth-child(2) .w { animation-delay: 0.1s; color: #7fc0ec; }
+  .line:nth-child(3) .w { animation-delay: 0.2s; }
+
+  :global(html.is-ready) .w {
+    animation-play-state: running;
+  }
+
+  @keyframes rise {
+    from { transform: translateY(105%); }
+  }
+
+  .hero__lead {
+    max-width: 30rem;
+    color: #c9ced6;
+    font-size: clamp(1.08rem, 1rem + 0.35vw, 1.25rem);
+  }
+
+  .hero :global(.hero__video) {
+    min-height: 52svh;
+    order: -1;
+  }
+
+  @media (min-width: 900px) {
+    .hero :global(.hero__video) {
+      order: 0;
+      min-height: 0;
+    }
+  }
+
+  /* ---------- Cifras ---------- */
+  .cifras {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cifras__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-block: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cifras li {
+    display: grid;
+    gap: 4px;
+    padding: 36px 28px 36px 0;
+  }
+
+  .cifras li + li {
+    padding-left: 28px;
+    border-left: 1px solid var(--line);
+  }
+
+  @media (max-width: 899px) {
+    .cifras li + li {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .cifras li {
+      padding-block: 22px;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  .cifras strong {
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 1.6rem + 2vw, 3.2rem);
+    line-height: 1;
+  }
+
+  .cifras span {
+    color: var(--ink-3);
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Cabeceras de sección ---------- */
+  .head {
+    display: grid;
+    gap: 4px;
+    max-width: 46rem;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+
+  .head__text {
+    margin-top: 18px;
+    color: var(--ink-2);
+    font-size: 1.1rem;
+  }
+
+  .head--row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: none;
+  }
+
+  /* ---------- Galería ---------- */
+  .gallery {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery figure {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery__a,
+  .gallery__b {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 900px) {
+    .gallery {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: clamp(200px, 21vw, 300px);
+    }
+    .gallery figure {
+      aspect-ratio: auto;
+    }
+    .gallery__a {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .gallery__b {
+      grid-column: auto;
+      grid-row: span 2;
+    }
+  }
+
+  .gallery :global(picture),
+  .gallery :global(img),
+  .split__media :global(picture),
+  .split__media :global(img),
+  .split__media video,
+  .first__photo :global(picture),
+  .first__photo :global(img),
+  .board__thumbs :global(picture),
+  .board__thumbs :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery :global(img) {
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .gallery figure:hover :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  .gallery figcaption,
+  .board__thumbs figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 8px 14px;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Bloques partidos ---------- */
+  .split {
+    display: grid;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+      min-height: min(90vh, 860px);
+    }
+  }
+
+  .split__media {
+    margin: 0;
+    min-height: 60vw;
+    overflow: hidden;
+    background: #1b1d21;
+  }
+
+  @media (min-width: 900px) {
+    .split__media {
+      min-height: 0;
+    }
+  }
+
+  .split__body {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(56px, 7vw, 110px) var(--gutter);
+  }
+
+  .split__body > p:not(.eyebrow) {
+    max-width: 32rem;
+    font-size: 1.1rem;
+  }
+
+  .split--ink {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .split--ink .split__body > p:not(.eyebrow) {
+    color: #c9ced6;
+  }
+
+  .split--blue {
+    background: var(--blue-deep);
+    color: #fff;
+  }
+
+  .split--blue .eyebrow {
+    color: rgb(255 255 255 / 0.75);
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 28px;
+    margin: 8px 0 0;
+    padding: 20px 0 0;
+    border-top: 1px solid rgb(255 255 255 / 0.15);
+    list-style: none;
+    color: #e4e7eb;
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .legend i {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  }
+
+  /* ---------- Tablas ---------- */
+  .board {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: min(100vh, 900px);
+    padding-block: 120px clamp(56px, 7vw, 96px);
+    overflow: hidden;
+    color: #fff;
+    background: #07090d;
+  }
+
+  .board :global(.board__bg),
+  .board :global(.board__bg img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(7 9 13 / 0.1) 30%, rgb(7 9 13 / 0.85));
+  }
+
+  .board__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 40px;
+    align-items: end;
+  }
+
+  @media (min-width: 900px) {
+    .board__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .board__copy {
+    display: grid;
+    gap: 20px;
+    max-width: 34rem;
+  }
+
+  .board__copy p:not(.eyebrow) {
+    color: #d3d8df;
+    font-size: 1.1rem;
+  }
+
+  .board__thumbs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .board__thumbs figure {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  /* ---------- Primera vez ---------- */
+  .first {
+    display: grid;
+    gap: 56px;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .first {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+  }
+
+  .steps {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    column-gap: 20px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .steps li > :not(.steps__n) {
+    grid-column: 2;
+  }
+
+  .steps__n {
+    grid-row: span 3;
+    color: var(--blue-deep);
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .steps h3 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .steps p {
+    margin-top: 4px;
+    color: var(--ink-2);
+  }
+
+  .steps a {
+    margin-top: 8px;
+    color: var(--blue-deep);
+    font-weight: 600;
+    text-underline-offset: 4px;
+  }
+
+  .first__photo {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  /* ---------- Tarifas ---------- */
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 30px 26px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .plan header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .plan h3 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+
+  .plan__badge {
+    white-space: nowrap;
+    padding: 4px 8px;
+    background: var(--blue-deep);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .plan__price {
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 3.4rem;
+    line-height: 1;
+  }
+
+  .plan__price small {
+    margin-left: 4px;
+    font-stretch: 100%;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--ink-3);
+  }
+
+  .plan__desc {
+    color: var(--ink-2);
+  }
+
+  .plan ul {
+    display: grid;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 16px 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    font-size: 0.95rem;
+  }
+
+  .plan li {
+    padding-left: 20px;
+    background: linear-gradient(var(--blue-deep), var(--blue-deep)) 0 0.62em / 10px 2px no-repeat;
+  }
+
+  .plan__note {
+    color: var(--ink-3);
+    font-size: 0.82rem;
+  }
+
+  .plan :global(.plan__cta) {
+    margin-top: auto;
+    justify-content: space-between;
+  }
+
+  .plan--featured {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .plan--featured .plan__desc,
+  .plan--featured .plan__price small,
+  .plan--featured .plan__note {
+    color: #b9c0ca;
+  }
+
+  .plan--featured ul {
+    border-top-color: rgb(255 255 255 / 0.15);
+  }
+
+  .plan--featured li {
+    background-image: linear-gradient(#7fc0ec, #7fc0ec);
+  }
+
+  /* ---------- Cierre ---------- */
+  .closing {
+    padding-block: clamp(80px, 10vw, 140px);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .closing__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .closing .h {
+    max-width: 16ch;
+    font-size: clamp(2.6rem, 1.4rem + 4.4vw, 5.6rem);
+  }
+
+  .closing + :global(.pie) {
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+  }
+</style>

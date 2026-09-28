@@ -9,9 +9,11 @@ import FichaVia from '../components/FichaVia.astro';
 import Pegatina from '../components/Pegatina.astro';
 import Colchoneta from '../components/Colchoneta.astro';
 import ViasFondo from '../components/ViasFondo.astro';
+import SelectorVersion from '../components/SelectorVersion.astro';
 import { circuitos, tarifas, info } from '../data/rw';
 
 import heroPoster from '../assets/img/hero-poster.jpg';
+import hombreAutobelay from '../assets/img/hombre-autobelay.webp';
 import vistaGeneral from '../assets/img/vista-general.webp';
 import primerHangar from '../assets/img/primer-hangar.jpg';
 import tercerHangar from '../assets/img/tercer-hangar.webp';
@@ -152,7 +154,7 @@ const pasos = [
               <figcaption><Cinta rot={-5} size="sm">Nuevo bloque</Cinta></figcaption>
             </figure>
             <figure class="clips__wide">
-              <video muted loop playsinline preload="none" data-src="/video/autobelay.mp4" aria-label="Escalando con autobelay"></video>
+              <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 18vw, 50vw" widths={[400, 700]} />
               <figcaption><Cinta color="blue" rot={-3} size="sm">Autobelay</Cinta></figcaption>
             </figure>
           </div>
@@ -310,6 +312,7 @@ const pasos = [
       <span>© Rock &amp; Wall Climbing S.L.</span>
     </div>
   </Colchoneta>
+  <SelectorVersion current="base" />
 </Base>
 
 <style>
@@ -784,8 +787,13 @@ const pasos = [
     aspect-ratio: 9 / 16;
   }
 
-  .clips__wide video {
+  .clips__wide :global(picture),
+  .clips__wide :global(img) {
+    display: block;
+    width: 100%;
     aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 6px;
   }
 
   .clips figcaption,

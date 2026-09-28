@@ -1,0 +1,124 @@
+---
+/** Pie de página sobrio para las versiones profesional, clásica y mixta. */
+import Logo from './Logo.astro';
+import Boton from './Boton.astro';
+import { info } from '../data/rw';
+
+interface Props {
+  shape?: 'rect' | 'pill' | 'offset';
+  tone?: 'blue' | 'orange';
+  class?: string;
+}
+
+const { shape = 'rect', tone = 'blue', class: className } = Astro.props;
+---
+
+<footer class:list={['pie', className]}>
+  <div class="container pie__grid">
+    <div class="pie__brand">
+      <Logo size="44px" tone="white" />
+      <p>El mayor rocódromo de Andalucía. Bloque, vías, tablas de entrenamiento y tardeo en Sevilla.</p>
+      <Boton href={info.reservar} tone={tone} shape={shape} external>Reservar sesión</Boton>
+    </div>
+    <dl class="pie__cols">
+      <div>
+        <dt>Horario</dt>
+        {info.horario.map((h) => <dd>{h}</dd>)}
+      </div>
+      <div>
+        <dt>Dónde</dt>
+        <dd><a href={info.mapa} target="_blank" rel="noopener">{info.direccion}</a></dd>
+      </div>
+      <div>
+        <dt>Síguenos</dt>
+        <dd><a href={info.instagram} target="_blank" rel="noopener">Instagram</a></dd>
+        <dd><a href={info.facebook} target="_blank" rel="noopener">Facebook</a></dd>
+        <dd><a href={info.whatsapp} target="_blank" rel="noopener">WhatsApp</a></dd>
+      </div>
+      <div>
+        <dt>Más</dt>
+        <dd><a href={info.tarifas} target="_blank" rel="noopener">Tarifas y horarios</a></dd>
+        <dd><a href={info.regalo} target="_blank" rel="noopener">Tarjeta regalo</a></dd>
+        <dd><a href={info.registro} target="_blank" rel="noopener">Registro</a></dd>
+      </div>
+    </dl>
+  </div>
+  <div class="container pie__legal">
+    <span>© Rock &amp; Wall Climbing S.L.</span>
+    <span>Calle Labrador 8 · Sevilla</span>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    padding: clamp(72px, 9vw, 120px) 0 96px;
+    background: #0d0f12;
+    color: #c9ced6;
+  }
+
+  .pie__grid {
+    display: grid;
+    gap: 56px;
+  }
+
+  @media (min-width: 900px) {
+    .pie__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    }
+  }
+
+  .pie__brand {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+    align-content: start;
+  }
+
+  .pie__brand p {
+    max-width: 22rem;
+  }
+
+  .pie__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 36px 28px;
+    margin: 0;
+  }
+
+  .pie__cols dt {
+    margin-bottom: 12px;
+    color: #fff;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .pie__cols dd {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+  }
+
+  .pie a {
+    color: inherit;
+    text-decoration-color: rgb(255 255 255 / 0.3);
+    text-underline-offset: 3px;
+  }
+
+  .pie a:hover {
+    color: #fff;
+  }
+
+  .pie__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 72px;
+    padding-top: 22px;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.82rem;
+    color: #8a919b;
+  }
+</style>

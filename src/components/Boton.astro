@@ -1,0 +1,167 @@
+---
+/**
+ * Botón sobrio para las versiones profesional, clásica y mixta.
+ * shape: rect (esquinas casi rectas), pill (redondeado) u offset (con el contorno desplazado).
+ */
+interface Props {
+  href: string;
+  tone?: 'ink' | 'blue' | 'orange' | 'white';
+  variant?: 'solid' | 'outline';
+  shape?: 'rect' | 'pill' | 'offset';
+  icon?: 'arrow' | 'out' | 'down' | 'none';
+  size?: 'md' | 'lg';
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  tone = 'ink',
+  variant = 'solid',
+  shape = 'rect',
+  icon = 'arrow',
+  size = 'md',
+  external = false,
+  class: className,
+} = Astro.props;
+
+const iconPath = {
+  arrow: 'M5 12h13M13 6.5 18.5 12 13 17.5',
+  down: 'M12 5v13M6.5 13 12 18.5 17.5 13',
+  out: 'M7 17 17 7M8.5 7H17v8.5',
+  none: '',
+}[icon];
+---
+
+<a
+  class:list={['btn', `btn--${variant}`, `btn--${shape}`, `btn--${size}`, className]}
+  data-tone={tone}
+  data-icon={icon}
+  href={href}
+  {...external ? { target: '_blank', rel: 'noopener' } : {}}
+>
+  <span>
+    <slot />
+  </span>
+  {
+    iconPath && (
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d={iconPath} />
+      </svg>
+    )
+  }
+</a>
+
+<style>
+  .btn {
+    --c: var(--ink);
+    --t: #fff;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 1em 1.45em;
+    border: 1.5px solid var(--c);
+    color: var(--t);
+    background: var(--c);
+    font-family: var(--f-display);
+    font-stretch: 100%;
+    font-weight: 700;
+    font-size: 0.8rem;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 0.25s var(--ease-out),
+      color 0.25s var(--ease-out),
+      border-color 0.25s var(--ease-out),
+      transform 0.25s var(--ease-out);
+  }
+
+  .btn[data-tone='blue'] { --c: var(--blue-deep); }
+  .btn[data-tone='orange'] { --c: #e0651a; }
+  .btn[data-tone='white'] { --c: #fff; --t: var(--ink); }
+
+  .btn--lg {
+    padding: 1.2em 1.75em;
+    font-size: 0.86rem;
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--c);
+  }
+
+  .btn svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .btn--rect {
+    border-radius: 2px;
+  }
+
+  .btn--pill {
+    border-radius: 999px;
+    padding-inline: 1.7em;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-size: 0.95rem;
+  }
+
+  /* Contorno desplazado, como en las fichas de competición */
+  .btn--offset {
+    border-radius: 0;
+  }
+
+  .btn--offset::after {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border: 1.5px solid var(--c);
+    translate: 5px 5px;
+    transition: translate 0.25s var(--ease-out);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .btn--solid:hover {
+      --c-h: color-mix(in oklab, var(--c), black 18%);
+      background: var(--c-h);
+      border-color: var(--c-h);
+    }
+    .btn[data-tone='white'].btn--solid:hover {
+      background: #e9eaec;
+      border-color: #e9eaec;
+    }
+    .btn--outline:hover {
+      background: var(--c);
+      color: var(--ink);
+    }
+    .btn--outline:not([data-tone='white']):hover {
+      color: #fff;
+    }
+    .btn:hover svg {
+      transform: translateX(3px);
+    }
+    .btn[data-icon='down']:hover svg {
+      transform: translateY(3px);
+    }
+    .btn[data-icon='out']:hover svg {
+      transform: translate(2px, -2px);
+    }
+    .btn--offset:hover::after {
+      translate: 0 0;
+    }
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+</style>

@@ -12,6 +12,17 @@ npm run dev      # http://localhost:4321 (home) y /lab (sistema visual)
 npm run build
 ```
 
+## Versiones del home
+
+Un selector flotante abajo permite saltar entre ellas.
+
+| Ruta | Estilo |
+|---|---|
+| `/` | Base: la página es una pared con vías de fondo, presas como botones y cinta de rotulador |
+| `/pro` | Profesional: fondos lisos en tinta y blanco, azul RW como único acento, fotos grandes |
+| `/clasica` | Clásica, en la línea de Arkose y Sputnik: vídeo a pantalla completa, bloques foto/texto y tarjetas |
+| `/mixta` | Mezcla de las dos, con la banda azul, la beta y los grados de las tarifas como firma de Rock & Wall |
+
 ## Estructura
 
 | Ruta | Qué es |

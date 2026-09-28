@@ -1,0 +1,693 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Logo from '../components/Logo.astro';
+import Boton from '../components/Boton.astro';
+import VideoFondo from '../components/VideoFondo.astro';
+import PieSobrio from '../components/PieSobrio.astro';
+import SelectorVersion from '../components/SelectorVersion.astro';
+import { tarifas, info } from '../data/rw';
+
+import heroWide from '../assets/img/hero-wide.jpg';
+import vistaGeneral from '../assets/img/vista-general.webp';
+import tercerHangar from '../assets/img/tercer-hangar.webp';
+import autobelay from '../assets/img/autobelay.webp';
+import kilter from '../assets/img/kilterboard.webp';
+import gimnasio from '../assets/img/gimnasio.webp';
+import genteEscalando from '../assets/img/gente-escalando.webp';
+import toeHook from '../assets/img/toe-hook.webp';
+
+const marquee = ['Bloque', 'Vías', 'Moon Board', 'Kilter Board', 'Autobelay', 'Gimnasio', 'Tardeo'];
+
+const actividades = [
+  { img: tercerHangar, alt: 'Bloques de colores en el tercer hangar', t: 'Bloque', d: 'Más de 500 m² con circuitos de colores, del muy fácil al nivel galáctico.', href: info.reservar },
+  { img: autobelay, alt: 'Muro de vías con el monograma RW y los autobelays', t: 'Vías y autobelay', d: 'Más de 80 vías con cuerda. Sin compañero, el autobelay te asegura.', href: info.reservar },
+  { img: kilter, alt: 'Kilter Board con los LEDs encendidos', t: 'Moon Board y Kilter', d: 'Tablas iluminadas para entrenar con problemas de todo el mundo.', href: info.reservar },
+  { img: gimnasio, alt: 'Zona de gimnasio', t: 'Entrenamiento', d: 'Zona de gimnasio para completar la sesión o preparar tu proyecto.', href: info.tarifas },
+  { img: genteEscalando, alt: 'Gente charlando y escalando en la zona de bloque', t: 'Tardeo', d: 'Después de escalar, la barra y la terraza siguen abiertas.', href: '#tardeo' },
+  { img: toeHook, alt: 'Escaladora haciendo un gancho de talón', t: 'Primera vez', d: '¿Nunca has escalado? Te contamos cómo es tu primer día.', href: '#primer-dia' },
+];
+
+const pasos = ['Regístrate online antes de venir.', 'Reserva día y hora.', 'Ven con ropa cómoda: pies de gato y arnés se alquilan por 3 €.'];
+---
+
+<Base title="Rock & Wall Climbing · Rocódromo en Sevilla">
+  <div class="cl">
+    <header class="nav">
+      <a href="/clasica" class="nav__logo"><Logo size="44px" tone="white" /></a>
+      <nav class="nav__links" aria-label="Principal">
+        <a href="#actividades">Qué hacer</a>
+        <a href="#primer-dia">Primer día</a>
+        <a href="#tarifas">Tarifas</a>
+        <a href="#tardeo">Tardeo</a>
+      </nav>
+      <Boton href={info.reservar} tone="orange" shape="pill" icon="none" external>Reservar</Boton>
+    </header>
+
+    <!-- Portada a pantalla completa -->
+    <section class="hero">
+      <VideoFondo
+        class="hero__bg"
+        poster={heroWide}
+        alt="Muros de bloque de Rock & Wall con bandas azules"
+        src="/video/hero-wide.mp4"
+        srcSm="/video/hero-560.mp4"
+      />
+      <div class="hero__content">
+        <h1 class="hero__title">Ven a escalar a Rock&nbsp;&amp;&nbsp;Wall</h1>
+        <p class="hero__sub">El mayor rocódromo de Andalucía, en Sevilla</p>
+        <Boton href={info.reservar} tone="orange" shape="pill" size="lg" external>Reserva tu sesión</Boton>
+      </div>
+      <a href="#intro" class="hero__scroll" aria-label="Bajar">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v13M6.5 13 12 18.5 17.5 13"></path></svg>
+      </a>
+    </section>
+
+    <!-- Franja en movimiento -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        {
+          [0, 1].map(() => (
+            <span>
+              {marquee.map((m) => (
+                <>
+                  {m}
+                  <i />
+                </>
+              ))}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <section class="split split--paper" id="intro">
+      <figure class="split__media">
+        <Foto src={vistaGeneral} alt="Vista general de la zona de bloque de Rock & Wall" sizes="(min-width: 900px) 50vw, 100vw" />
+      </figure>
+      <div class="split__body">
+        <Logo size="52px" tone="ink" />
+        <h2 class="h">Tu rocódromo en Sevilla</h2>
+        <p>
+          Tres hangares de pared en Calle Labrador para escalar como quieras: bloque para todos los niveles, vías con
+          cuerda y autobelay, tablas de entrenamiento y gimnasio. Abierto los siete días de la semana.
+        </p>
+        <ul class="stats">
+          <li><strong>+500 m²</strong> de bloque</li>
+          <li><strong>+80</strong> vías</li>
+          <li><strong>2</strong> tablas</li>
+        </ul>
+        <Boton href="#actividades" tone="ink" shape="pill" icon="down">Descubre la sala</Boton>
+      </div>
+    </section>
+
+    <!-- Actividades -->
+    <section class="sec sec--black" id="actividades">
+      <div class="container">
+        <h2 class="h h--center">Todo lo que puedes hacer</h2>
+        <div class="cards">
+          {
+            actividades.map((a) => (
+              <a class="card" href={a.href} {...(a.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                <div class="card__img">
+                  <Foto src={a.img} alt={a.alt} sizes="(min-width: 1000px) 30vw, (min-width: 640px) 45vw, 100vw" widths={[480, 800]} />
+                </div>
+                <h3>{a.t}</h3>
+                <p>{a.d}</p>
+                <span class="card__more">Ver más</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Primer día -->
+    <section class="split split--paper split--rev" id="primer-dia">
+      <div class="split__body">
+        <p class="kick">Tu primer día</p>
+        <h2 class="h">¿Nunca has escalado?</h2>
+        <p>
+          No hace falta experiencia ni venir en forma. Bloque sin cuerda y a poca altura, colchonetas en todo el suelo y
+          circuitos fáciles para empezar.
+        </p>
+        <ol class="pasos">
+          {pasos.map((p) => <li>{p}</li>)}
+        </ol>
+        <div class="actions">
+          <Boton href={info.reservar} tone="orange" shape="pill" external>Reserva tu primera sesión</Boton>
+          <Boton href={info.registro} tone="ink" variant="outline" shape="pill" icon="out" external>Registro</Boton>
+        </div>
+      </div>
+      <figure class="split__media">
+        <Foto src={toeHook} alt="Escaladora colgada de un bloque con un gancho de talón" sizes="(min-width: 900px) 50vw, 100vw" widths={[600, 900, 1200]} />
+      </figure>
+    </section>
+
+    <!-- Tarifas -->
+    <section class="sec sec--black" id="tarifas">
+      <div class="container">
+        <h2 class="h h--center">Elige tu tarifa</h2>
+        <p class="lead-center">Tarifas de verano 2026. Menores de 18 con descuento.</p>
+        <div class="plans">
+          {
+            tarifas.map((t) => (
+              <article class:list={['plan', { 'plan--featured': 'featured' in t && t.featured }]}>
+                {'badge' in t && t.badge && <span class="plan__badge">{t.badge}</span>}
+                <h3>{t.name}</h3>
+                <p class="plan__price">
+                  {t.price} €<small>{'unit' in t && t.unit}</small>
+                </p>
+                <p class="plan__desc">{t.desc}</p>
+                <ul>
+                  {t.items.map((it) => (
+                    <li>{it}</li>
+                  ))}
+                </ul>
+                <Boton href={t.cta.href} tone={'featured' in t && t.featured ? 'orange' : 'ink'} shape="pill" icon="none" external class="plan__cta">
+                  {t.cta.label}
+                </Boton>
+              </article>
+            ))
+          }
+        </div>
+        <p class="plans__note">Los bonos llevan 5 € de suplemento por la tarjeta al empezar.</p>
+      </div>
+    </section>
+
+    <!-- Tardeo -->
+    <section class="split split--paper" id="tardeo">
+      <figure class="split__media">
+        <video muted loop playsinline preload="none" data-src="/video/tardeo.mp4" data-poster="/video/tardeo-poster.jpg" aria-label="Terraza y barra de Rock & Wall por la tarde"></video>
+      </figure>
+      <div class="split__body">
+        <p class="kick">Tardeo</p>
+        <h2 class="h">Y después, tardeo</h2>
+        <p>
+          Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
+          llena de la gente con la que acabas de escalar.
+        </p>
+        <Boton href={info.instagram} tone="ink" shape="pill" icon="out" external>Ver el ambiente</Boton>
+      </div>
+    </section>
+
+    <PieSobrio shape="pill" tone="orange" />
+  </div>
+  <SelectorVersion current="clasica" />
+</Base>
+
+<style>
+  .cl {
+    --black: #0e0f11;
+    --paper: #efeee9;
+    --orange-cl: #e0651a;
+    background: var(--paper);
+  }
+
+  .h {
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .h--center {
+    text-align: center;
+    margin-inline: auto;
+    max-width: 20ch;
+  }
+
+  .kick {
+    color: var(--orange-cl);
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .sec {
+    padding-block: clamp(80px, 9vw, 130px);
+  }
+
+  .sec--black {
+    background: var(--black);
+    color: #fff;
+  }
+
+  /* ---------- Cabecera ---------- */
+  .nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 24px var(--gutter);
+    color: #fff;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    margin-right: auto;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 28px;
+    font-family: var(--f-display);
+    font-stretch: 112%;
+    font-weight: 650;
+    font-size: 0.92rem;
+  }
+
+  .nav__links a {
+    text-decoration: none;
+  }
+
+  .nav__links a:hover {
+    color: #ffb27d;
+  }
+
+  @media (max-width: 1000px) {
+    .nav__links {
+      display: none;
+    }
+  }
+
+  /* ---------- Portada ---------- */
+  .hero {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: min(100svh, 980px);
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+  }
+
+  .hero :global(.hero__bg) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.5), transparent 25%),
+      rgb(8 9 11 / 0.42);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 22px;
+    justify-items: center;
+    padding: 120px var(--gutter) 80px;
+  }
+
+  .hero__title {
+    max-width: 14ch;
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 1rem + 5.4vw, 5.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .hero__sub {
+    margin-bottom: 10px;
+    color: rgb(255 255 255 / 0.85);
+    font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem);
+  }
+
+  :global(html.js) .hero__content > * {
+    animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) both paused;
+  }
+
+  :global(html.js) .hero__content > :nth-child(2) { animation-delay: 0.12s; }
+  :global(html.js) .hero__content > :nth-child(3) { animation-delay: 0.24s; }
+
+  :global(html.is-ready) .hero__content > * {
+    animation-play-state: running;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+  }
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 34px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    translate: -50% 0;
+    border: 1.5px solid rgb(255 255 255 / 0.6);
+    border-radius: 50%;
+    color: #fff;
+  }
+
+  .hero__scroll svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- Franja ---------- */
+  .marquee {
+    overflow: hidden;
+    padding: 18px 0;
+    background: var(--black);
+    color: #fff;
+    border-block: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+
+  .marquee span {
+    display: flex;
+    align-items: center;
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.9rem);
+    white-space: nowrap;
+  }
+
+  .marquee i {
+    width: 10px;
+    height: 10px;
+    margin: 0 32px;
+    border-radius: 50%;
+    background: var(--orange-cl);
+  }
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+
+  /* ---------- Bloques partidos ---------- */
+  .split {
+    display: grid;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+      min-height: min(88vh, 820px);
+    }
+    .split--rev .split__media {
+      order: 2;
+    }
+  }
+
+  .split--paper {
+    background:
+      var(--speckle),
+      var(--paper);
+  }
+
+  .split__media {
+    margin: 0;
+    min-height: 70vw;
+    overflow: hidden;
+    background: #1b1d21;
+  }
+
+  @media (min-width: 900px) {
+    .split__media {
+      min-height: 0;
+    }
+  }
+
+  .split__media :global(picture),
+  .split__media :global(img),
+  .split__media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .split__body {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(56px, 7vw, 110px) var(--gutter);
+  }
+
+  .split__body > p:not(.kick) {
+    max-width: 32rem;
+    color: var(--ink-2);
+    font-size: 1.05rem;
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-2);
+  }
+
+  .stats strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 1.8rem;
+    line-height: 1.1;
+  }
+
+  .pasos {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+  }
+
+  .pasos li {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    counter-increment: paso;
+  }
+
+  .pasos li::before {
+    content: counter(paso);
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    translate: 0 -2px;
+  }
+
+  /* ---------- Tarjetas ---------- */
+  .cards {
+    display: grid;
+    gap: 40px 24px;
+    margin-top: 56px;
+  }
+
+  @media (min-width: 640px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .card {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card__img {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 8px;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .card__img :global(picture),
+  .card__img :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+  }
+
+  .card h3 {
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 1.3rem;
+  }
+
+  .card p {
+    color: #b9bec6;
+  }
+
+  .card__more {
+    justify-self: start;
+    margin-top: 4px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid var(--orange-cl);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  @media (hover: hover) {
+    .card:hover .card__img :global(img) {
+      transform: scale(1.05);
+    }
+  }
+
+  /* ---------- Tarifas ---------- */
+  .lead-center {
+    margin-top: 16px;
+    color: #b9bec6;
+    text-align: center;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 56px;
+  }
+
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 34px 28px 28px;
+    border-radius: 18px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .plan h3 {
+    font-family: var(--f-display);
+    font-stretch: 112%;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .plan__price {
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+
+  .plan__price small {
+    margin-left: 6px;
+    font-stretch: 100%;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--ink-3);
+  }
+
+  .plan__desc {
+    color: var(--ink-2);
+  }
+
+  .plan ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.94rem;
+  }
+
+  .plan li::before {
+    content: '✓';
+    margin-right: 10px;
+    color: var(--orange-cl);
+    font-weight: 700;
+  }
+
+  .plan :global(.plan__cta) {
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  .plan--featured {
+    outline: 3px solid var(--orange-cl);
+    outline-offset: -3px;
+  }
+
+  .plan__badge {
+    position: absolute;
+    top: -13px;
+    left: 28px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--orange-cl);
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .plans__note {
+    margin-top: 28px;
+    color: #8a919b;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+</style>
