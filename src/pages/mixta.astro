@@ -169,7 +169,8 @@ const pasos = [
           class="beta-full"
         />
       </div>
-      <div class="split__body">
+      <div class="escalar__col">
+      <div class="split__body escalar__body">
         <p class="label">02 · Bloque y vías</p>
         <h2 class="h">Cada color, un nivel</h2>
         <p>
@@ -186,13 +187,14 @@ const pasos = [
             ))
           }
         </ul>
+      </div>
         <div class="duo">
           <figure>
-            <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 20vw, 45vw" widths={[400, 700]} />
+            <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
             <figcaption>Autobelay</figcaption>
           </figure>
           <figure>
-            <Foto src={hombreEscalando} alt="Escalador en una vía con cuerda" sizes="(min-width: 900px) 20vw, 45vw" widths={[400, 700]} />
+            <Foto src={hombreEscalando} alt="Escalador en una vía con cuerda" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
             <figcaption>Vías</figcaption>
           </figure>
         </div>
@@ -819,16 +821,29 @@ const pasos = [
     text-transform: uppercase;
   }
 
+  /* Texto arriba y las dos fotos a todo el ancho de la columna, pegadas abajo como la beta */
+  .escalar__col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .escalar__body {
+    flex: 1;
+    padding-block: clamp(48px, 5vw, 72px) 40px;
+  }
+
+  #escalar {
+    min-height: 0;
+  }
+
   .duo {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    width: min(100%, 400px);
-    margin-top: 4px;
+    gap: 4px;
   }
 
   .duo figure {
-    aspect-ratio: 1;
+    aspect-ratio: 3 / 2;
   }
 
   /* ---------- La sala ---------- */

@@ -122,12 +122,12 @@ const arrows = notes.map((n, i) => {
     background: var(--wall-3);
   }
 
+  /* La foto ocupa el ancho y lo que sobra se corta por abajo (cropBottom), así las marcas no se desplazan */
   .beta :global(.beta__img),
   .beta :global(.beta__img img) {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 0;
+    height: auto;
   }
 
   .beta__svg {
