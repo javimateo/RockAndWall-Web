@@ -8,7 +8,7 @@ cinta de salida, bandas azules, LEDs de la Kilter, colchoneta) y las fotos reale
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/lab
+npm run dev      # http://localhost:4321 (home) y /lab (sistema visual)
 npm run build
 ```
 
@@ -16,6 +16,9 @@ npm run build
 
 | Ruta | Qué es |
 |---|---|
+| `src/pages/index.astro` | Home: la página entera es una pared, con el texto en una columna limpia |
+| `src/components/ViasFondo.astro` | Vías de fondo en los márgenes (volúmenes, macros, regletas, pinzas). SVG estático generado al compilar |
+| `src/scripts/videos.ts` | Vídeos diferidos: se cargan cerca de la pantalla y se pausan al salir |
 | `src/pages/lab.astro` | «Del muro a la web»: sistema visual con todos los componentes |
 | `src/components/Presa.astro` | Botón con forma de presa (magnesio al pasar, se hunde al pulsar) |
 | `src/components/Cinta.astro` | Etiqueta de cinta escrita a rotulador |

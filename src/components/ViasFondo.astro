@@ -1,0 +1,301 @@
+---
+/**
+ * Vías de fondo en los márgenes de la página, al estilo de una pared de competición:
+ * volúmenes geométricos asomando por el borde y vías de un solo color con presas modernas
+ * (macros de doble textura, regletas con arandela, pinzas y cazos).
+ * Es SVG estático generado al compilar: no hay JavaScript ni trabajo al hacer scroll.
+ * Va dentro de un contenedor posicionado que define --m (ancho del margen) y --k (escala).
+ */
+import { rng } from '../lib/draw';
+
+const HEIGHT = 16000;
+const NOMINAL = 150;
+
+const HOLD_COLORS = ['#ffd23a', '#2f7fe0', '#e5352b', '#1d1f23', '#ff4f9a', '#45bf4b', '#ff7a1a'];
+const VOLUMES = [
+  { id: 'v-tri', c: '#2b95dc' },
+  { id: 'v-tri', c: '#26292e' },
+  { id: 'v-hex', c: '#ffd23a' },
+  { id: 'v-hex', c: '#2b95dc' },
+  { id: 'v-fin', c: '#26292e', c2: '#ffd23a' },
+  { id: 'v-fin', c: '#e5352b', c2: '#f4f3ee' },
+  { id: 'v-tri', c: '#f4f3ee' },
+];
+const HOLDS = [
+  { id: 'h-crimp', w: 34, s: [0.85, 1.15], rot: 30 },
+  { id: 'h-macro', w: 14, s: [1.05, 1.45], rot: 180 },
+  { id: 'h-pinch', w: 18, s: [0.75, 1.05], rot: 40 },
+  { id: 'h-jug', w: 12, s: [0.8, 1.1], rot: 180 },
+  { id: 'h-foot', w: 18, s: [0.8, 1.2], rot: 180 },
+];
+
+interface Item {
+  id: string;
+  f: number;
+  y: number;
+  r: number;
+  s: number;
+  c: string;
+  c2?: string;
+}
+
+function lane(seed: number): Item[] {
+  const rand = rng(seed);
+  const pick = <T,>(list: readonly T[]) => list[Math.floor(rand() * list.length)];
+  const between = ([a, b]: number[]) => a + rand() * (b - a);
+  const total = HOLDS.reduce((n, h) => n + h.w, 0);
+  const pickHold = () => {
+    let t = rand() * total;
+    return HOLDS.find((h) => (t -= h.w) < 0) ?? HOLDS[0];
+  };
+
+  const volumes: Item[] = [];
+  for (let y = 260 + rand() * 300; y < HEIGHT; y += 1000 + rand() * 700) {
+    const v = pick(VOLUMES);
+    volumes.push({ id: v.id, f: -0.12 + rand() * 0.34, y, r: rand() * 360, s: 0.9 + rand() * 0.5, c: v.c, c2: v.c2 ?? v.c });
+  }
+
+  const holds: Item[] = [];
+  const free = (x: number, y: number) =>
+    volumes.every((v) => Math.hypot(v.f * NOMINAL - x, v.y - y) > 95 * v.s) &&
+    holds.every((h) => Math.hypot(h.f * NOMINAL - x, h.y - y) > 46);
+
+  for (const [center, offset] of [
+    [0.38, 40],
+    [0.7, 150],
+  ]) {
+    let color = pick(HOLD_COLORS);
+    let change = 2400 + rand() * 1800;
+    for (let y = offset + rand() * 60; y < HEIGHT; y += 150 + rand() * 90) {
+      if (y > change) {
+        color = pick(HOLD_COLORS.filter((c) => c !== color));
+        change = y + 2400 + rand() * 1800;
+      }
+      const f = center + (rand() - 0.5) * 0.22;
+      if (!free(f * NOMINAL, y)) continue;
+      let h = pickHold();
+      // Las macros son grandes: solo en la vía exterior, para que no lleguen al texto
+      if (h.id === 'h-macro' && f > 0.5) h = HOLDS[0];
+      holds.push({ id: h.id, f, y, r: (rand() - 0.5) * 2 * h.rot, s: between(h.s), c: color });
+    }
+  }
+  return [...volumes, ...holds];
+}
+
+const left = lane(11);
+const right = lane(47);
+
+const place = (it: Item, mirror: boolean) => ({
+  x: `${((mirror ? 1 - it.f : it.f) * 100).toFixed(1)}%`,
+  y: it.y.toFixed(0),
+  style: `--c:${it.c};--c2:${it.c2 ?? it.c};transform:scale(calc(${mirror ? -it.s : it.s} * var(--k, 1)), calc(${it.s} * var(--k, 1))) rotate(${it.r.toFixed(0)}deg)`,
+  href: `#${it.id}`,
+});
+
+/* Hexágono con el centro hundido: cada cara se sombrea según hacia dónde mira */
+const hexPts = (r: number, ox = 0, oy = 0) =>
+  Array.from({ length: 6 }, (_, i) => {
+    const a = ((60 * i - 90) * Math.PI) / 180;
+    return [ox + r * Math.cos(a), oy + r * Math.sin(a)] as const;
+  });
+const outer = hexPts(64);
+const inner = hexPts(27, 5, 8);
+const light = [-0.5, -0.85];
+const hexFaces = outer.map((p, i) => {
+  const j = (i + 1) % 6;
+  const a = ((60 * i - 60) * Math.PI) / 180;
+  const dot = Math.cos(a) * light[0] + Math.sin(a) * light[1];
+  return {
+    d: `M${p[0].toFixed(1)} ${p[1].toFixed(1)}L${outer[j][0].toFixed(1)} ${outer[j][1].toFixed(1)}L${inner[j][0].toFixed(1)} ${inner[j][1].toFixed(1)}L${inner[i][0].toFixed(1)} ${inner[i][1].toFixed(1)}Z`,
+    shade: dot > 0 ? `rgb(255 255 255 / ${(dot * 0.3).toFixed(2)})` : `rgb(0 0 0 / ${(-dot * 0.34).toFixed(2)})`,
+  };
+});
+const poly = (pts: readonly (readonly [number, number])[]) => 'M' + pts.map((p) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join('L') + 'Z';
+const outerHex = poly(outer);
+const innerHex = poly(inner);
+
+const CRIMP = 'M-30 9C-30-6-17-18 0-18S30-6 30 9c0 6-7 8-30 8S-30 15-30 9Z';
+const MACRO = 'M-46 16C-52-8-32-32-4-32C24-32 46-18 46 4C46 24 30 30 14 24C2 19-8 26-20 30C-32 34-43 28-46 16Z';
+const PINCH = 'M-44 16C-26 12-10-10 2-26C8-22 20-4 44 12C28 18-24 22-44 16Z';
+const JUG = 'M-28 4C-30-16-14-30 4-28C22-26 32-10 28 8C24 24 8 30-8 28C-22 26-27 16-28 4Z';
+const FOOT = 'M-11 3C-12-5-5-10 2-9C9-8 12-2 10 4C8 9 0 11-5 9C-9 8-11 6-11 3Z';
+---
+
+<svg class="vias-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="vf-gloss" cx="0.34" cy="0.28" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5"></stop>
+      <stop offset="0.55" stop-color="#fff" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0.2"></stop>
+    </radialGradient>
+    <linearGradient id="vf-steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f1f3f5"></stop>
+      <stop offset="1" stop-color="#8e949b"></stop>
+    </linearGradient>
+    <filter id="vf-shadow" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="2" dy="7" stdDeviation="4" flood-color="#0c0e12" flood-opacity="0.26"></feDropShadow>
+    </filter>
+    <pattern id="vf-grit" width="5" height="5" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.6" fill="#fff" fill-opacity="0.28"></circle>
+      <circle cx="3.6" cy="3.2" r="0.55" fill="#000" fill-opacity="0.16"></circle>
+    </pattern>
+
+    <!-- Regleta atornillada con arandela (foto 6) -->
+    <g id="h-crimp">
+      <path d={CRIMP} style="fill:var(--c)"></path>
+      <path d={CRIMP} fill="url(#vf-grit)"></path>
+      <path d={CRIMP} fill="url(#vf-gloss)"></path>
+      <path d="M-30 9c8 3 52 3 60 0c0 6-7 8-30 8S-30 15-30 9Z" fill="#000" fill-opacity="0.22"></path>
+      <path d="M-26 1C-22-9-12-15 0-15" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"></path>
+      <circle cy="1" r="7.5" fill="url(#vf-steel)"></circle>
+      <circle cy="1" r="3.4" fill="#16171a"></circle>
+      <circle cx="-19" cy="6" r="1.9" fill="#000" fill-opacity="0.5"></circle>
+      <circle cx="19" cy="5" r="1.9" fill="#000" fill-opacity="0.5"></circle>
+    </g>
+
+    <!-- Macro de doble textura: parte con grano y parte brillante (foto 5) -->
+    <g id="h-macro">
+      <path d={MACRO} style="fill:var(--c)"></path>
+      <path d={MACRO} fill="url(#vf-gloss)" opacity="0.6"></path>
+      <path d="M-40-2C-34-22-18-30-2-30C20-30 38-20 42-2C30-10 14-12-2-10C-16-8-28-2-40-2Z" fill="#fff" fill-opacity="0.2"></path>
+      <path d="M-40-2C-34-22-18-30-2-30C20-30 38-20 42-2C30-10 14-12-2-10C-16-8-28-2-40-2Z" fill="url(#vf-grit)"></path>
+      <path d="M-46 16C-43 28-32 34-20 30C-8 26 2 19 14 24C30 30 46 24 46 4C44 16 32 22 16 18C2 14-8 20-20 24C-32 28-42 24-46 16Z" fill="#000" fill-opacity="0.2"></path>
+      <path d="M-39 12C-37 19-31 23-23 21" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="2.4" stroke-linecap="round"></path>
+      <circle cx="-30" cy="22" r="1.8" fill="#000" fill-opacity="0.45"></circle>
+      <circle cx="32" cy="16" r="1.8" fill="#000" fill-opacity="0.45"></circle>
+      <circle cx="4" cy="-4" r="4" fill="url(#vf-steel)"></circle>
+      <circle cx="4" cy="-4" r="1.8" fill="#16171a"></circle>
+    </g>
+
+    <!-- Pinza de arista (foto 7) -->
+    <g id="h-pinch">
+      <path d={PINCH} style="fill:var(--c)"></path>
+      <path d={PINCH} fill="url(#vf-grit)"></path>
+      <path d="M-44 16C-26 12-10-10 2-26C0-8-2 6-2 19C-20 20-34 19-44 16Z" fill="#fff" fill-opacity="0.16"></path>
+      <path d="M2-26C8-22 20-4 44 12C28 18 12 19-2 19C-2 6 0-8 2-26Z" fill="#000" fill-opacity="0.24"></path>
+      <path d="M2-26C0-8-2 6-2 19" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="1.5"></path>
+      <circle cx="-22" cy="12" r="1.8" fill="#000" fill-opacity="0.55"></circle>
+      <circle cx="22" cy="11" r="1.8" fill="#000" fill-opacity="0.55"></circle>
+      <circle cx="-1" cy="4" r="3.8" fill="url(#vf-steel)"></circle>
+      <circle cx="-1" cy="4" r="1.7" fill="#16171a"></circle>
+    </g>
+
+    <!-- Cazo (foto 1) -->
+    <g id="h-jug">
+      <path d={JUG} style="fill:var(--c)"></path>
+      <path d={JUG} fill="url(#vf-gloss)"></path>
+      <ellipse cx="2" cy="-4" rx="15" ry="12" fill="#000" fill-opacity="0.36"></ellipse>
+      <path d="M-12 3C-6 9 10 9 16 1" fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round"></path>
+      <circle cx="2" cy="-5" r="3" fill="#16171a"></circle>
+    </g>
+
+    <!-- Pie -->
+    <g id="h-foot">
+      <path d={FOOT} style="fill:var(--c)"></path>
+      <path d={FOOT} fill="url(#vf-gloss)"></path>
+      <circle cy="0" r="1.6" fill="#000" fill-opacity="0.55"></circle>
+    </g>
+
+    <!-- Volumen piramidal (foto 2) -->
+    <g id="v-tri">
+      <path d="M-6-78L-78 52L0 8Z" style="fill:var(--c)"></path>
+      <path d="M-6-78L-78 52L0 8Z" fill="#fff" fill-opacity="0.1"></path>
+      <path d="M-78 52L80 40L0 8Z" style="fill:var(--c)"></path>
+      <path d="M-78 52L80 40L0 8Z" fill="#000" fill-opacity="0.3"></path>
+      <path d="M80 40L-6-78L0 8Z" style="fill:var(--c)"></path>
+      <path d="M80 40L-6-78L0 8Z" fill="#000" fill-opacity="0.12"></path>
+      <path d="M-78 52L80 40L-6-78Z" fill="url(#vf-grit)"></path>
+      <path d="M0 8L-78 52M0 8L80 40M0 8L-6-78" stroke="#000" stroke-opacity="0.12" stroke-width="0.8"></path>
+      <g fill="#000" fill-opacity="0.4">
+        <circle cx="-22" cy="-6" r="1.8"></circle>
+        <circle cx="-38" cy="22" r="1.8"></circle>
+        <circle cx="26" cy="-4" r="1.8"></circle>
+        <circle cx="4" cy="32" r="1.8"></circle>
+      </g>
+    </g>
+
+    <!-- Hexágono hundido (foto 2) -->
+    <g id="v-hex">
+      <path d={outerHex} style="fill:var(--c)"></path>
+      {hexFaces.map((f) => <path d={f.d} fill={f.shade}></path>)}
+      <path d={innerHex} fill="#000" fill-opacity="0.34"></path>
+      <path d={outerHex} fill="url(#vf-grit)"></path>
+      <path d={innerHex} fill="none" stroke="#000" stroke-opacity="0.2" stroke-width="1"></path>
+    </g>
+
+    <!-- Aleta de dos colores (foto 4) -->
+    <g id="v-fin">
+      <path d="M-72 52L22-84L-8 50Z" style="fill:var(--c2)"></path>
+      <path d="M-72 52L22-84L-8 50Z" fill="url(#vf-gloss)"></path>
+      <path d="M-8 50L22-84L72 48Z" style="fill:var(--c)"></path>
+      <path d="M-8 50L22-84L72 48Z" fill="#000" fill-opacity="0.18"></path>
+      <path d="M-72 52L72 48L22-84Z" fill="url(#vf-grit)"></path>
+      <path d="M22-84L-8 50" stroke="#fff" stroke-opacity="0.3" stroke-width="1.2"></path>
+      <g fill="#000" fill-opacity="0.45">
+        <circle cx="18" cy="-30" r="1.8"></circle>
+        <circle cx="30" cy="12" r="1.8"></circle>
+        <circle cx="-22" cy="24" r="1.8"></circle>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<svg class="vias vias--left" aria-hidden="true" focusable="false">
+  {
+    left.map((it) => {
+      const p = place(it, false);
+      return (
+        <svg x={p.x} y={p.y} overflow="visible">
+          <use href={p.href} style={p.style} filter="url(#vf-shadow)" />
+        </svg>
+      );
+    })
+  }
+</svg>
+<svg class="vias vias--right" aria-hidden="true" focusable="false">
+  {
+    right.map((it) => {
+      const p = place(it, true);
+      return (
+        <svg x={p.x} y={p.y} overflow="visible">
+          <use href={p.href} style={p.style} filter="url(#vf-shadow)" />
+        </svg>
+      );
+    })
+  }
+</svg>
+
+<style>
+  .vias-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .vias {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: var(--m);
+    height: 100%;
+    max-width: none;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Borde interior difuminado: lo que llega a la columna de texto se desvanece en vez de cortarse */
+  .vias--left {
+    left: 0;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent);
+  }
+
+  .vias--right {
+    right: 0;
+    mask-image: linear-gradient(270deg, #000 calc(100% - 26px), transparent);
+  }
+
+  .vias :global(use) {
+    transform-origin: 0 0;
+  }
+</style>

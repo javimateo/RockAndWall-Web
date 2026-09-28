@@ -1,4 +1,1041 @@
 ---
-// La home llega en el siguiente paso; mientras tanto, la raíz lleva al sistema visual.
-return Astro.redirect('/lab');
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Logo from '../components/Logo.astro';
+import Presa from '../components/Presa.astro';
+import Cinta from '../components/Cinta.astro';
+import Beta from '../components/Beta.astro';
+import FichaVia from '../components/FichaVia.astro';
+import Pegatina from '../components/Pegatina.astro';
+import Colchoneta from '../components/Colchoneta.astro';
+import ViasFondo from '../components/ViasFondo.astro';
+import { circuitos, tarifas, info } from '../data/rw';
+
+import heroPoster from '../assets/img/hero-poster.jpg';
+import vistaGeneral from '../assets/img/vista-general.webp';
+import primerHangar from '../assets/img/primer-hangar.jpg';
+import tercerHangar from '../assets/img/tercer-hangar.webp';
+import gimnasio from '../assets/img/gimnasio.webp';
+import deEspaldas from '../assets/img/de-espaldas.webp';
+import kilter from '../assets/img/kilterboard.webp';
+import moonwall from '../assets/img/moonwall.webp';
+import genteEscalando from '../assets/img/gente-escalando.webp';
+
+const cifras = [
+  { n: '+500', u: 'm²', t: 'de bloque' },
+  { n: '+80', u: '', t: 'vías con cuerda' },
+  { n: '2', u: '', t: 'tablas: Moon y Kilter' },
+  { n: '7', u: 'días', t: 'abierto toda la semana' },
+];
+
+const pasos = [
+  { n: 1, kind: 'start', t: 'Regístrate', d: 'Rellena el registro online antes de venir.', href: info.registro, cta: 'Registro' },
+  { n: 2, kind: 'hand', t: 'Reserva', d: 'Elige día y hora. Así te aseguras la entrada.', href: info.reservar, cta: 'Reservar' },
+  { n: 3, kind: 'top', t: 'Ven y escala', d: 'Con ropa cómoda. Pies de gato y arnés se alquilan aquí por 3 € cada uno.' },
+];
 ---
+
+<Base>
+  <main class="home">
+    <ViasFondo />
+
+    <header class="top container">
+      <a href="/" class="top__logo"><Logo size="44px" /></a>
+      <nav class="top__nav" aria-label="Principal">
+        <a href="#sala">La sala</a>
+        <a href="#escalar">Bloque y vías</a>
+        <a href="#tarifas">Tarifas</a>
+        <a href="#primera-vez">Primera vez</a>
+      </nav>
+      <Presa href={info.reservar} external shape="crimp" rot={-2}>Reservar</Presa>
+    </header>
+
+    <!-- Top: reunión -->
+    <section class="hero sec">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <p class="kicker hero__kicker">
+            <Cinta color="blue" rot={-3} size="sm">Sevilla</Cinta>
+            El mayor rocódromo de Andalucía
+          </p>
+          <h1 class="display hero__title">
+            <span class="line"><span class="w w--sube">Sube.</span></span>
+            <span class="line line--caes"><span class="w w--caes">Caes.</span></span>
+            <span class="line"><span class="w w--vuelves">Vuelves.</span></span>
+          </h1>
+          <p class="lead hero__lead">
+            Más de 500 m² de bloque, más de 80 vías, Moon Board y Kilter Board. En Calle Labrador 8.
+          </p>
+          <div class="hero__cta">
+            <Presa href={info.reservar} external>Reserva tu sesión</Presa>
+            <Presa href="#tarifas" color="white" shape="sloper" icon="down" rot={2}>Ver tarifas</Presa>
+          </div>
+        </div>
+        <div class="hero__media">
+          <div class="hero__frame">
+            <Foto src={heroPoster} alt="Pared de Rock & Wall con presas de colores y bandas azules" sizes="(min-width: 900px) 42vw, 92vw" widths={[480, 800, 1000]} priority />
+            <video class="hero__video" muted loop playsinline preload="none" data-hero data-src="/video/hero-800.mp4" data-src-sm="/video/hero-560.mp4" aria-hidden="true"></video>
+          </div>
+          <Pegatina ring="Climb more · Try again · Climb more · Try again ·" color="orange" rot={-10} size="128px" class="hero__sticker">¡Otra!</Pegatina>
+        </div>
+      </div>
+    </section>
+
+    <!-- La sala -->
+    <section class="sec" id="sala">
+      <div class="container sala__head">
+        <p class="kicker"><span class="coord">01</span> La sala</p>
+        <h2 class="h2">Tres hangares<br />para escalar</h2>
+        <p class="lead">
+          Bloque para todos los niveles, vías con cuerda y autobelay, tablas de entrenamiento y zona de gimnasio. Todo
+          bajo el mismo techo.
+        </p>
+      </div>
+
+      <div class="banda" data-reveal>
+        <ul class="container cifras">
+          {
+            cifras.map((c) => (
+              <li>
+                <strong class="display">
+                  {c.n}
+                  {c.u && <small>{c.u}</small>}
+                </strong>
+                <span>{c.t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="container mosaico">
+        <figure class="mosaico__big">
+          <Foto src={vistaGeneral} alt="Vista general del rocódromo con los muros de bloque" sizes="(min-width: 900px) 55vw, 100vw" />
+        </figure>
+        <figure>
+          <Foto src={primerHangar} alt="Primer hangar de Rock & Wall" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
+          <figcaption class="hand">Primer hangar</figcaption>
+        </figure>
+        <figure>
+          <Foto src={tercerHangar} alt="Tercer hangar con las bandas azules" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
+          <figcaption class="hand">Tercer hangar</figcaption>
+        </figure>
+        <figure>
+          <Foto src={gimnasio} alt="Zona de gimnasio y entrenamiento" sizes="(min-width: 900px) 25vw, 100vw" widths={[480, 800]} />
+          <figcaption class="hand">Gimnasio</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Bloque y vías -->
+    <section class="sec" id="escalar">
+      <div class="container split">
+        <div class="split__copy">
+          <p class="kicker"><span class="coord">02</span> Bloque y vías</p>
+          <h2 class="h2">Cada color,<br />un nivel</h2>
+          <p>
+            Los bloques van por circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado: 5, 6a,
+            7a… Y si vienes sin compañero, el autobelay te asegura.
+          </p>
+          <ol class="circuitos">
+            {
+              circuitos.map((c, i) => (
+                <li>
+                  <Cinta color={c.color} rot={i % 2 ? 2 : -2} size="sm">{c.label}</Cinta>
+                </li>
+              ))
+            }
+          </ol>
+          <div class="clips">
+            <figure class="clips__reel">
+              <video muted loop playsinline preload="none" data-src="/video/nuevo-bloque.mp4" data-poster="/video/nuevo-bloque-poster.jpg" aria-label="Equipador montando un bloque nuevo"></video>
+              <figcaption><Cinta rot={-5} size="sm">Nuevo bloque</Cinta></figcaption>
+            </figure>
+            <figure class="clips__wide">
+              <video muted loop playsinline preload="none" data-src="/video/autobelay.mp4" aria-label="Escalando con autobelay"></video>
+              <figcaption><Cinta color="blue" rot={-3} size="sm">Autobelay</Cinta></figcaption>
+            </figure>
+          </div>
+        </div>
+        <Beta
+          image={deEspaldas}
+          alt="Escaladora de espaldas resolviendo un bloque sobre la pared gris"
+          points={[
+            { x: 300, y: 440, kind: 'start', n: 1 },
+            { x: 738, y: 548, kind: 'hand', n: 2 },
+            { x: 760, y: 800, kind: 'foot' },
+            { x: 420, y: 1080, kind: 'foot' },
+            { x: 505, y: 385, kind: 'hand', n: 3, r: 7 },
+            { x: 800, y: 292, kind: 'hand', n: 4, r: 6.5 },
+            { x: 510, y: 180, kind: 'top', n: 'Top', r: 8 },
+          ]}
+          class="split__beta"
+        />
+      </div>
+    </section>
+
+    <!-- Tablas -->
+    <section class="sec" id="tablas">
+      <div class="container">
+        <div class="noche" data-reveal>
+          <div class="noche__copy">
+            <p class="kicker"><span class="coord">03</span> Tablas</p>
+            <h2 class="h2">Se enciende<br />la pared</h2>
+            <p>
+              Moon Board y Kilter Board: dos tablas iluminadas para entrenar fuerza con problemas de todo el mundo. Eliges
+              uno en la app y se encienden sus presas.
+            </p>
+          </div>
+          <figure class="noche__a">
+            <Foto src={kilter} alt="Kilter Board con los LEDs encendidos" sizes="(min-width: 900px) 30vw, 100vw" widths={[480, 800]} />
+            <figcaption class="hand">Kilter Board</figcaption>
+          </figure>
+          <figure class="noche__b">
+            <Foto src={moonwall} alt="Moon Board de Rock & Wall" sizes="(min-width: 900px) 22vw, 100vw" widths={[480, 800]} />
+            <figcaption class="hand">Moon Board</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Primera vez -->
+    <section class="sec" id="primera-vez">
+      <div class="container split split--rev">
+        <div class="split__copy">
+          <p class="kicker"><span class="coord">04</span> Primera vez</p>
+          <h2 class="h2">Tu primer<br />bloque en<br />tres pasos</h2>
+          <ol class="pasos">
+            {
+              pasos.map((p) => (
+                <li data-kind={p.kind}>
+                  <span class="pasos__n hand">{p.kind === 'top' ? 'Top' : p.n}</span>
+                  <div>
+                    <h3 class="h3">{p.t}</h3>
+                    <p>{p.d}</p>
+                    {p.href && (
+                      <a class="pasos__link" href={p.href} target="_blank" rel="noopener">
+                        {p.cta} →
+                      </a>
+                    )}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <figure class="split__photo">
+          <Foto src={genteEscalando} alt="Gente escalando en los muros de bloque" sizes="(min-width: 900px) 45vw, 100vw" widths={[600, 900, 1200]} />
+        </figure>
+      </div>
+    </section>
+
+    <!-- Tarifas -->
+    <section class="sec" id="tarifas">
+      <div class="container">
+        <div class="tarifas__head">
+          <p class="kicker"><span class="coord">05</span> Tarifas · verano 2026</p>
+          <h2 class="h2">Elige tu vía</h2>
+          <p>Cuanto más vienes, menos te cuesta cada sesión. Cada tarifa lleva su grado, hasta el 8a del bono anual.</p>
+        </div>
+        <div class="fichas">
+          {tarifas.map((t) => <FichaVia {...t} />)}
+        </div>
+        <div class="tarifas__more">
+          <Presa href={info.tarifas} color="white" shape="sloper" icon="out" external rot={1}>Todas las tarifas</Presa>
+          <Presa href={info.regalo} color="yellow" shape="crimp" icon="out" external rot={-2}>Tarjeta regalo</Presa>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tardeo -->
+    <section class="sec" id="tardeo">
+      <div class="container tardeo">
+        <div class="tardeo__copy">
+          <p class="kicker"><span class="coord">06</span> Tardeo</p>
+          <h2 class="h2">Y después,<br />tardeo.</h2>
+          <p class="lead">
+            Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
+            llena de la gente con la que acabas de escalar.
+          </p>
+          <Presa href={info.instagram} color="ink" external icon="out" rot={-1}>Ver el ambiente</Presa>
+        </div>
+        <figure class="tardeo__video">
+          <video muted loop playsinline preload="none" data-src="/video/tardeo.mp4" data-poster="/video/tardeo-poster.jpg" aria-label="Terraza y barra de Rock & Wall por la tarde"></video>
+          <figcaption><Cinta color="pink" rot={3}>Tardeo</Cinta></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Salida -->
+    <section class="sec salida">
+      <div class="container">
+        <span class="salida__tape"><Cinta color="green" size="lg" rot={-3}>Salida</Cinta></span>
+        <h2 class="display salida__title">Aquí empieza<br /><span>tu vía.</span></h2>
+        <p class="lead salida__lead">Reserva tu sesión, átate y a por el top.</p>
+        <div class="hero__cta">
+          <Presa href={info.reservar} external>Reservar sesión</Presa>
+          <Presa href={info.registro} color="blue" shape="sloper" icon="out" external rot={2}>Registrarme</Presa>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Colchoneta>
+    <div class="foot">
+      <div class="foot__claim">
+        <p class="display foot__title">Caes<br />aquí.</p>
+        <Presa href={info.reservar} color="orange" external rot={-2}>Y vuelves mañana</Presa>
+      </div>
+      <dl class="foot__info">
+        <div>
+          <dt>Horario</dt>
+          {info.horario.map((h) => <dd>{h}</dd>)}
+        </div>
+        <div>
+          <dt>Dónde</dt>
+          <dd><a href={info.mapa} target="_blank" rel="noopener">{info.direccion}</a></dd>
+        </div>
+        <div>
+          <dt>Síguenos</dt>
+          <dd>
+            <a href={info.instagram} target="_blank" rel="noopener">Instagram</a> ·
+            <a href={info.whatsapp} target="_blank" rel="noopener">WhatsApp</a> ·
+            <a href={info.facebook} target="_blank" rel="noopener">Facebook</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div class="foot__legal">
+      <Logo size="34px" tone="white" />
+      <span>© Rock &amp; Wall Climbing S.L.</span>
+    </div>
+  </Colchoneta>
+</Base>
+
+<style>
+  /*
+   * La página entera es un panel: el fondo lleva el grano y las juntas,
+   * y los agujeros van en una capa propia para que también se vean sobre las bandas pintadas.
+   * Ninguna sección crea contexto de apilamiento, así las presas quedan entre la pared y el contenido.
+   */
+  .home {
+    --gutter: clamp(44px, 10.5vw, 180px);
+    /* Ancho real del margen (donde van las vías de fondo) y escala de sus presas */
+    --m: max(var(--gutter), (100% - var(--max)) / 2);
+    --k: 1;
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background-color: var(--wall);
+    background-image:
+      var(--speckle),
+      linear-gradient(90deg, var(--seam) 1px, transparent 1px),
+      linear-gradient(0deg, var(--seam) 1px, transparent 1px);
+    background-size: 220px 220px, 416px 416px, 416px 416px;
+    background-position: 0 0, -13px 0, 0 -13px;
+  }
+
+  .home::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle, #6d7075 0 1.3px, #b9bbb7 1.8px, rgb(255 255 255 / 0.8) 2.4px, transparent 3.1px),
+      radial-gradient(circle, #6d7075 0 1.3px, #b9bbb7 1.8px, rgb(255 255 255 / 0.8) 2.4px, transparent 3.1px);
+    background-size: 52px 52px;
+    background-position: 0 0, 26px 26px;
+    /* Los agujeros se ven en los márgenes y casi desaparecen detrás del texto */
+    mask-image: linear-gradient(
+      90deg,
+      #000 calc(var(--m) - 24px),
+      rgb(0 0 0 / 0.12) calc(var(--m) + 48px),
+      rgb(0 0 0 / 0.12) calc(100% - var(--m) - 48px),
+      #000 calc(100% - var(--m) + 24px)
+    );
+  }
+
+  .home :global(.container) {
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 1199px) {
+    .home {
+      --k: 0.82;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .home {
+      --k: 0.64;
+    }
+  }
+
+  @media (max-width: 759px) {
+    .home {
+      --gutter: 30px;
+      --k: 0.42;
+    }
+  }
+
+  .sec {
+    position: relative;
+    padding-block: clamp(80px, 11vw, 170px);
+  }
+
+  /* ---------- Cabecera ---------- */
+  .top {
+    position: absolute !important;
+    inset: 0 0 auto;
+    z-index: 10 !important;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-block: 22px;
+  }
+
+  .top__logo {
+    display: inline-flex;
+    margin-right: auto;
+    text-decoration: none;
+  }
+
+  .top__nav {
+    display: flex;
+    gap: 26px;
+    font-family: var(--f-display);
+    font-stretch: 85%;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .top__nav a {
+    text-decoration: none;
+    background: linear-gradient(var(--orange), var(--orange)) 0 100% / 0 2px no-repeat;
+    transition: background-size 0.3s var(--ease-out);
+  }
+
+  .top__nav a:hover {
+    background-size: 100% 2px;
+  }
+
+  @media (max-width: 980px) {
+    .top__nav {
+      display: none;
+    }
+  }
+
+  @media (max-width: 759px) {
+    .top :global(.logo) {
+      --size: 34px !important;
+    }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-top: clamp(130px, 14vw, 190px);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: clamp(40px, 5vw, 72px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 26px;
+    justify-items: start;
+  }
+
+  .hero__kicker {
+    gap: 14px;
+  }
+
+  .hero__title {
+    display: grid;
+    font-size: clamp(4rem, 1.2rem + 8.4vw, 9rem);
+  }
+
+  /*
+   * Cada palabra sube desde detrás de una máscara; «Caes.» cae con un solo rebote.
+   * Solo transform y opacity, y no arranca hasta que la fuente ha cargado (html.is-ready).
+   */
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.08em;
+    margin-block: -0.08em;
+  }
+
+  .line--caes {
+    overflow: visible;
+  }
+
+  .w {
+    display: block;
+  }
+
+  .w--caes {
+    color: var(--orange);
+  }
+
+  :global(html.js) .w {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both paused;
+    will-change: transform;
+  }
+
+  :global(html.js) .w--caes {
+    animation: drop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s both paused;
+  }
+
+  :global(html.js) .w--vuelves {
+    animation-delay: 0.62s;
+  }
+
+  :global(html.is-ready) .w {
+    animation-play-state: running !important;
+  }
+
+  @keyframes rise {
+    from { transform: translateY(105%); }
+  }
+
+  @keyframes drop {
+    from { opacity: 0; transform: translateY(-75%); }
+    35% { opacity: 1; }
+  }
+
+  .hero__lead {
+    max-width: 30rem;
+    font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
+    font-weight: 450;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px 30px;
+    align-items: center;
+    padding-top: 8px;
+  }
+
+  .hero__media {
+    position: relative;
+  }
+
+  .hero__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    max-height: 78vh;
+    border-radius: 8px;
+    background: var(--wall-3);
+    box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.55);
+  }
+
+  .hero__frame :global(picture),
+  .hero__frame :global(img),
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* El vídeo aparece encima de la portada cuando ya se está reproduciendo */
+  .hero__video {
+    opacity: 0;
+    transition: opacity 0.8s var(--ease-out);
+  }
+
+  .hero__video:global(.is-playing) {
+    opacity: 1;
+  }
+
+  .hero__media :global(.hero__sticker) {
+    position: absolute;
+    left: -34px;
+    bottom: -30px;
+  }
+
+  @media (max-width: 759px) {
+    .hero__media :global(.hero__sticker) {
+      --size: 96px !important;
+      left: auto;
+      right: -8px;
+      bottom: -34px;
+    }
+  }
+
+  /* ---------- La sala ---------- */
+  .sala__head {
+    display: grid;
+    gap: 22px;
+  }
+
+  .sala__head > * {
+    max-width: 46rem;
+  }
+
+  /* Banda azul pintada: el color va en un pseudo-elemento para no tapar la capa de agujeros */
+  .banda {
+    position: relative;
+    margin-block: clamp(56px, 7vw, 96px);
+    padding-block: clamp(56px, 6vw, 88px);
+    color: #fff;
+  }
+
+  .banda::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grain), var(--blue);
+    clip-path: polygon(0 16%, 62% 0, 100% 10%, 100% 86%, 34% 100%, 0 92%);
+  }
+
+  .cifras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 34px 28px;
+    margin-block: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cifras li {
+    display: grid;
+    gap: 8px;
+  }
+
+  .cifras strong {
+    font-size: clamp(3.6rem, 2rem + 4vw, 6rem);
+  }
+
+  .cifras small {
+    margin-left: 0.12em;
+    font-size: 0.42em;
+  }
+
+  .cifras span {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .banda:global(.is-in) .cifras li {
+    animation: sube 0.8s var(--ease-out) both;
+  }
+
+  .banda:global(.is-in) .cifras li:nth-child(2) { animation-delay: 0.1s; }
+  .banda:global(.is-in) .cifras li:nth-child(3) { animation-delay: 0.2s; }
+  .banda:global(.is-in) .cifras li:nth-child(4) { animation-delay: 0.3s; }
+
+  .mosaico {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 900px) {
+    .mosaico {
+      grid-template-columns: 2.2fr 1fr 1fr;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      height: min(62vw, 640px);
+    }
+    .mosaico__big {
+      grid-row: span 2;
+    }
+  }
+
+  .mosaico figure:last-child {
+    grid-column: span 2;
+  }
+
+  .mosaico figure,
+  .split__photo,
+  .noche figure {
+    position: relative;
+    margin: 0;
+    min-height: 0;
+  }
+
+  .mosaico__big {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 900px) {
+    .mosaico__big {
+      grid-column: auto;
+    }
+  }
+
+  .mosaico :global(picture),
+  .mosaico :global(img),
+  .split__photo :global(picture),
+  .split__photo :global(img),
+  .noche :global(picture),
+  .noche :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .mosaico figure:not(.mosaico__big) {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 900px) {
+    .mosaico figure:not(.mosaico__big) {
+      aspect-ratio: auto;
+    }
+  }
+
+  figcaption.hand {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    color: #fff;
+    font-size: 1.15rem;
+    text-shadow: 0 1px 6px rgb(0 0 0 / 0.6);
+    rotate: -2deg;
+  }
+
+  /* ---------- Split (bloque y vías, primera vez) ---------- */
+  .split {
+    display: grid;
+    gap: clamp(48px, 6vw, 96px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+    .split--rev {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    }
+    .split--rev .split__copy {
+      order: 2;
+    }
+  }
+
+  .split__copy {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .split__copy > p {
+    max-width: 32rem;
+  }
+
+  .circuitos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 10px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .clips {
+    display: grid;
+    grid-template-columns: 0.62fr 1fr;
+    gap: 14px;
+    align-items: end;
+    width: min(100%, 460px);
+    margin-top: 22px;
+  }
+
+  .clips figure,
+  .tardeo__video {
+    position: relative;
+    margin: 0;
+  }
+
+  .clips video,
+  .tardeo video {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    background: var(--wall-3);
+  }
+
+  .clips__reel video {
+    aspect-ratio: 9 / 16;
+  }
+
+  .clips__wide video {
+    aspect-ratio: 4 / 5;
+  }
+
+  .clips figcaption,
+  .tardeo figcaption {
+    position: absolute;
+    top: -12px;
+    left: 12px;
+  }
+
+  .split :global(.split__beta) {
+    width: 100%;
+    max-width: 540px;
+    justify-self: center;
+    border-radius: 6px;
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
+  }
+
+  .split__photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* ---------- Tablas ---------- */
+  .noche {
+    display: grid;
+    gap: 18px;
+    padding: clamp(28px, 4vw, 56px);
+    border-radius: 10px;
+    background:
+      radial-gradient(60% 50% at 80% 10%, rgb(47 216 245 / 0.14), transparent 70%),
+      radial-gradient(50% 50% at 10% 100%, rgb(255 63 209 / 0.1), transparent 70%),
+      var(--night);
+    color: #e9eef6;
+    box-shadow: 0 50px 80px -50px rgb(0 0 0 / 0.7);
+  }
+
+  .noche__copy {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    padding-right: 12px;
+  }
+
+  .noche__copy .kicker {
+    color: var(--led-hand);
+  }
+
+  .noche__copy p:not(.kicker) {
+    color: #b8c2d0;
+    max-width: 28rem;
+  }
+
+  .noche figure {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 900px) {
+    .noche {
+      grid-template-columns: 1.1fr 1fr 0.8fr;
+      align-items: stretch;
+    }
+    .noche figure {
+      aspect-ratio: auto;
+      min-height: 440px;
+    }
+  }
+
+  /* ---------- Primera vez ---------- */
+  .pasos {
+    display: grid;
+    gap: 26px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    --c: #ffe14a;
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .pasos li[data-kind='start'] { --c: var(--led-start); }
+  .pasos li[data-kind='top'] { --c: var(--led-top); }
+
+  .pasos__n {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 4px solid var(--c);
+    border-radius: 48% 52% 50% 50% / 55% 48% 52% 45%;
+    font-size: 1.35rem;
+    line-height: 1;
+    rotate: -6deg;
+  }
+
+  .pasos li[data-kind='top'] .pasos__n {
+    font-size: 1.05rem;
+  }
+
+  .pasos .h3 {
+    margin-bottom: 6px;
+  }
+
+  .pasos p {
+    max-width: 26rem;
+  }
+
+  .pasos__link {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: var(--f-display);
+    font-weight: 750;
+    font-size: 0.86rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue-deep);
+  }
+
+  /* ---------- Tarifas ---------- */
+  .tarifas__head {
+    display: grid;
+    gap: 22px;
+    max-width: 44rem;
+    margin-bottom: 64px;
+  }
+
+  .fichas {
+    display: grid;
+    gap: 36px 26px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    align-items: stretch;
+  }
+
+  .tarifas__more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 30px;
+    margin-top: 56px;
+  }
+
+  /* ---------- Tardeo ---------- */
+  .tardeo {
+    display: grid;
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .tardeo {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  .tardeo__copy {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+
+  .tardeo__copy .lead {
+    max-width: 30rem;
+  }
+
+  .tardeo video {
+    aspect-ratio: 16 / 10;
+    box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.55);
+  }
+
+  /* ---------- Salida ---------- */
+  .salida {
+    padding-bottom: clamp(100px, 12vw, 180px);
+  }
+
+  .salida .container {
+    display: grid;
+    gap: 28px;
+    justify-items: start;
+  }
+
+  .salida__tape {
+    display: inline-block;
+  }
+
+  .salida__title {
+    font-size: clamp(3.6rem, 1rem + 8vw, 9rem);
+  }
+
+  .salida__title span {
+    color: var(--blue);
+  }
+
+  /* ---------- Pie ---------- */
+  .foot {
+    display: grid;
+    gap: 56px;
+  }
+
+  @media (min-width: 900px) {
+    .foot {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: end;
+    }
+  }
+
+  .foot__claim {
+    display: grid;
+    gap: 26px;
+    justify-items: start;
+  }
+
+  .foot__title {
+    font-size: clamp(4.4rem, 2rem + 9vw, 10rem);
+    color: #fff;
+    text-shadow: 0 3px 0 rgb(0 0 0 / 0.12);
+  }
+
+  .foot__info {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+  }
+
+  .foot__info dt {
+    margin-bottom: 4px;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .foot__info dd {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .foot__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 80px;
+    padding-top: 22px;
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+    font-size: 0.82rem;
+    opacity: 0.85;
+  }
+</style>

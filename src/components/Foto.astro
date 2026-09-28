@@ -9,10 +9,11 @@ interface Props {
   sizes: string;
   widths?: number[];
   loading?: 'lazy' | 'eager';
+  priority?: boolean;
   class?: string;
 }
 
-const { src, alt, sizes, widths = [480, 800, 1200, 1600], loading = 'lazy', class: className } = Astro.props;
+const { src, alt, sizes, widths = [480, 800, 1200, 1600], loading = 'lazy', priority = false, class: className } = Astro.props;
 const usable = widths.filter((w) => w <= src.width);
 ---
 
@@ -23,7 +24,8 @@ const usable = widths.filter((w) => w <= src.width);
   widths={usable.length ? usable : [src.width]}
   formats={['avif', 'webp']}
   fallbackFormat="webp"
-  loading={loading}
-  decoding="async"
+  loading={priority ? 'eager' : loading}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
   pictureAttributes={{ class: className }}
 />
