@@ -10,7 +10,7 @@ import Foto from './Foto.astro';
 interface Item {
   img: ImageMetadata;
   alt: string;
-  caption: string;
+  caption?: string;
 }
 interface Props {
   items: Item[];

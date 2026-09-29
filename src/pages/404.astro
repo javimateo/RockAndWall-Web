@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Boton from '../components/Boton.astro';
+---
+
+<Base title="Página no encontrada · Rock & Wall Climbing">
+  <main class="nf">
+    <span class="nf__band" aria-hidden="true"></span>
+    <a href="/mixta" class="nf__logo" aria-label="Rock & Wall, ir al inicio"><Logo size="48px" tone="white" /></a>
+    <div class="nf__body">
+      <p class="nf__code">404</p>
+      <h1 class="nf__h">Esta vía ya no está montada</h1>
+      <p class="nf__p">La página que buscas no existe o ha cambiado de sitio. Como los bloques de la sala, que se renuevan cada semana.</p>
+      <div class="nf__actions">
+        <Boton href="/mixta" tone="blue" shape="offset">Volver al inicio</Boton>
+        <Boton href="/pared" tone="white" shape="offset">Ver qué hay montado</Boton>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100svh;
+    padding: 24px var(--gutter) clamp(48px, 8vw, 96px);
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* Banda azul en diagonal, como las pintadas en la pared */
+  .nf__band {
+    position: absolute;
+    top: -10%;
+    right: -12%;
+    width: 46%;
+    height: 130%;
+    background: var(--blue);
+    clip-path: polygon(38% 0, 100% 0, 62% 100%, 0 100%);
+    opacity: 0.9;
+  }
+
+  .nf__logo {
+    position: relative;
+    display: inline-flex;
+    justify-self: start;
+  }
+
+  .nf__body {
+    position: relative;
+    align-self: end;
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+    max-width: 46rem;
+  }
+
+  .nf__code {
+    color: #7fc0ec;
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+  }
+
+  .nf__h {
+    font-family: var(--f-display);
+    font-stretch: 64%;
+    font-weight: 880;
+    font-size: clamp(3rem, 1.6rem + 5.4vw, 6.4rem);
+    line-height: 0.88;
+    text-transform: uppercase;
+  }
+
+  .nf__p {
+    max-width: 34rem;
+    color: #c9ced6;
+    font-size: 1.08rem;
+  }
+
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 20px;
+    margin-top: 8px;
+  }
+</style>

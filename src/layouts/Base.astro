@@ -1,5 +1,10 @@
 ---
 import '../styles/base.css';
+import { getImage } from 'astro:assets';
+import heroWide from '../assets/img/hero-wide.jpg';
+
+/** Mientras sea una demo no debe salir en Google (competiría con la web real). Al publicarla de verdad, false. */
+const DEMO = true;
 
 interface Props {
   title?: string;
@@ -10,6 +15,10 @@ const {
   title = 'Rock & Wall Climbing · Rocódromo en Sevilla',
   description = 'El mayor rocódromo de Andalucía está en Sevilla. Más de 500 m² de bloque, más de 80 vías, Moon Board, Kilter Board y el mejor tardeo.',
 } = Astro.props;
+
+// Imagen que se ve al compartir el enlace por WhatsApp, redes, etc.
+const og = await getImage({ src: heroWide, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogImage = new URL(og.src, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -20,6 +29,17 @@ const {
     <meta name="description" content={description} />
     <meta name="theme-color" content="#eeefeb" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {DEMO && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Rock & Wall Climbing" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>{title}</title>
     <script is:inline>
       // Las animaciones de entrada esperan a la tipografía para no saltar al cambiar de fuente
