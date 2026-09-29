@@ -5,7 +5,7 @@ import Foto from '../components/Foto.astro';
 import Logo from '../components/Logo.astro';
 import Boton from '../components/Boton.astro';
 import Beta from '../components/Beta.astro';
-import Carrusel from '../components/Carrusel.astro';
+import GaleriaZonas from '../components/GaleriaZonas.astro';
 import VideoFondo from '../components/VideoFondo.astro';
 import PieSobrio from '../components/PieSobrio.astro';
 import SelectorVersion from '../components/SelectorVersion.astro';
@@ -151,7 +151,7 @@ const pasos = [
           <Boton href={info.reservar} tone="ink" shape="offset" external>Ven a conocerla</Boton>
         </div>
       </div>
-      <Carrusel items={sala} label="Fotos de la sala: arrastra o usa las flechas" />
+      <GaleriaZonas items={sala} label="Zonas de la sala" />
     </section>
 
     <!-- Bloque y vías -->
