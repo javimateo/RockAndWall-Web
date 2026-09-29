@@ -5,7 +5,7 @@ import Foto from '../components/Foto.astro';
 import Logo from '../components/Logo.astro';
 import Boton from '../components/Boton.astro';
 import Beta from '../components/Beta.astro';
-import GaleriaZonas from '../components/GaleriaZonas.astro';
+import Carrusel from '../components/Carrusel.astro';
 import VideoFondo from '../components/VideoFondo.astro';
 import PieSobrio from '../components/PieSobrio.astro';
 import SelectorVersion from '../components/SelectorVersion.astro';
@@ -36,14 +36,14 @@ import claseEscalada from '../assets/img/clase-escalada.webp';
 import slab from '../assets/img/slab.webp';
 
 const sala = [
-  { img: hangar1, alt: 'Zona de bloque renovada, con desplomes y la pasarela', caption: 'Zona de desplomes' },
-  { img: zonaVias, alt: 'Zona de vías vista desde la entrada', caption: 'Zona de vías' },
-  { img: autobelay3, alt: 'Muro de vías con el monograma RW y los autobelays', caption: 'Muro del autobelay' },
-  { img: vistaGeneral, alt: 'Zona de bloque con volúmenes y bandas azules', caption: 'Zona de bloque' },
-  { img: tercerHangar, alt: 'Muro de bloque con presas de colores y bandas azules', caption: 'Bloque de colores' },
-  { img: hombreDesplome, alt: 'Escalador en un desplome', caption: 'En el desplome' },
-  { img: autobelay2, alt: 'Vías con presas de colores y bandas azules', caption: 'Vías' },
-  { img: gimnasio, alt: 'Zona de gimnasio y entrenamiento', caption: 'Gimnasio' },
+  { img: hangar1, alt: 'Zona de bloque renovada, con desplomes y la pasarela' },
+  { img: zonaVias, alt: 'Zona de vías vista desde la entrada' },
+  { img: autobelay3, alt: 'Muro de vías con el monograma RW y los autobelays' },
+  { img: vistaGeneral, alt: 'Zona de bloque con volúmenes y bandas azules' },
+  { img: tercerHangar, alt: 'Muro de bloque con presas de colores y bandas azules' },
+  { img: hombreDesplome, alt: 'Escalador en un desplome' },
+  { img: autobelay2, alt: 'Vías con presas de colores y bandas azules' },
+  { img: gimnasio, alt: 'Zona de gimnasio y entrenamiento' },
 ];
 
 const cursos = [
@@ -151,7 +151,7 @@ const pasos = [
           <Boton href={info.reservar} tone="ink" shape="offset" external>Ven a conocerla</Boton>
         </div>
       </div>
-      <GaleriaZonas items={sala} label="Zonas de la sala" />
+      <Carrusel items={sala} label="Fotos de la sala: arrastra o usa las flechas" />
     </section>
 
     <!-- Bloque y vías -->
