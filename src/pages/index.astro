@@ -87,7 +87,7 @@ const pasos = [
     <section class="sec" id="sala">
       <div class="container sala__head">
         <p class="kicker"><span class="coord">01</span> La sala</p>
-        <h2 class="h2">Tres hangares<br />para escalar</h2>
+        <h2 class="h2">Zonas de bloque<br />y de vías</h2>
         <p class="lead">
           Bloque para todos los niveles, vías con cuerda y autobelay, tablas de entrenamiento y zona de gimnasio. Todo
           bajo el mismo techo.
@@ -115,12 +115,12 @@ const pasos = [
           <Foto src={vistaGeneral} alt="Vista general del rocódromo con los muros de bloque" sizes="(min-width: 900px) 55vw, 100vw" />
         </figure>
         <figure>
-          <Foto src={primerHangar} alt="Primer hangar de Rock & Wall" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
-          <figcaption class="hand">Primer hangar</figcaption>
+          <Foto src={primerHangar} alt="Zona de bloque con desplomes y volúmenes" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
+          <figcaption class="hand">Desplomes</figcaption>
         </figure>
         <figure>
-          <Foto src={tercerHangar} alt="Tercer hangar con las bandas azules" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
-          <figcaption class="hand">Tercer hangar</figcaption>
+          <Foto src={tercerHangar} alt="Muro de bloque con presas de colores y bandas azules" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
+          <figcaption class="hand">Bloque de colores</figcaption>
         </figure>
         <figure>
           <Foto src={gimnasio} alt="Zona de gimnasio y entrenamiento" sizes="(min-width: 900px) 25vw, 100vw" widths={[480, 800]} />
@@ -136,8 +136,7 @@ const pasos = [
           <p class="kicker"><span class="coord">02</span> Bloque y vías</p>
           <h2 class="h2">Cada color,<br />un nivel</h2>
           <p>
-            Los bloques van por circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado: 5, 6a,
-            7a… Y si vienes sin compañero, el autobelay te asegura.
+            Los bloques van por circuitos de colores, del verde, el más fácil, al negro. Los blancos no tienen nivel: lo descubres al escalarlos. Las vías, por grado francés: 5a, 6a, 6b… Y si vienes sin compañero, el autobelay te asegura.
           </p>
           <ol class="circuitos">
             {
@@ -147,6 +146,7 @@ const pasos = [
                 </li>
               ))
             }
+            <li><Cinta color="white" rot={-2} size="sm">Blanco: ¿?</Cinta></li>
           </ol>
           <div class="clips">
             <figure class="clips__reel">
@@ -791,7 +791,7 @@ const pasos = [
   .clips__wide :global(img) {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     object-fit: cover;
     border-radius: 6px;
   }

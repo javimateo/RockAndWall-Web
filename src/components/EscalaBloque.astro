@@ -1,0 +1,135 @@
+---
+/** Escala de dificultad de los circuitos de bloque, de más fácil a más difícil, con el blanco aparte. */
+import { circuitos, misterioso } from '../data/rw';
+
+interface Props {
+  dark?: boolean;
+  class?: string;
+}
+
+const { dark = false, class: className } = Astro.props;
+
+const hex: Record<string, string> = {
+  green: 'var(--h-green)',
+  blue: 'var(--h-blue)',
+  yellow: 'var(--h-yellow)',
+  orange: 'var(--h-orange)',
+  pink: 'var(--h-pink)',
+  red: 'var(--h-red)',
+  black: '#1b1c1f',
+  white: '#f4f3ee',
+};
+---
+
+<div class:list={['escala', className]} data-dark={dark ? '' : undefined}>
+  <p class="escala__ends" aria-hidden="true"><span>Más fácil</span><span>Más difícil</span></p>
+  <ol class="escala__bar" aria-label="Circuitos de bloque de más fácil a más difícil">
+    {
+      circuitos.map((c) => (
+        <li style={`--c:${hex[c.color]}`}>
+          <i />
+          <span>{c.label}</span>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="escala__mystery">
+    <i style={`--c:${hex[misterioso.color]}`}></i>
+    <span><strong>{misterioso.label}</strong> · {misterioso.desc}</span>
+  </p>
+</div>
+
+<style>
+  .escala {
+    --line: rgb(18 20 23 / 0.2);
+    --muted: var(--ink-3);
+    display: grid;
+    gap: 10px;
+    width: min(100%, 480px);
+  }
+
+  .escala[data-dark] {
+    --line: rgb(255 255 255 / 0.25);
+    --muted: #aab1bb;
+  }
+
+  .escala__ends {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-family: var(--f-display);
+    font-stretch: 115%;
+    font-weight: 700;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .escala__ends span:last-child::after {
+    content: ' →';
+  }
+
+  .escala__ends span:first-child::before {
+    content: '← ';
+  }
+
+  .escala__bar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .escala__bar li {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .escala__bar i,
+  .escala__mystery i {
+    display: block;
+    height: 12px;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .escala__bar span {
+    overflow: hidden;
+    font-size: 0.74rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .escala__mystery {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  .escala__mystery i {
+    flex: none;
+    width: 38px;
+  }
+
+  .escala__mystery span {
+    color: var(--muted);
+  }
+
+  .escala__mystery strong {
+    color: inherit;
+    font-weight: 700;
+  }
+
+  .escala[data-dark] .escala__mystery strong {
+    color: #fff;
+  }
+
+  .escala:not([data-dark]) .escala__mystery strong {
+    color: var(--ink);
+  }
+</style>

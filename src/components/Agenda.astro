@@ -1,0 +1,714 @@
+---
+/**
+ * Agenda: tablón con los próximos grandes eventos y calendario mensual con cursos,
+ * actividades y eventos. El calendario se pinta en el navegador a partir de src/data/agenda.ts.
+ * variant ajusta acento, esquinas y tipografía a cada versión de la web.
+ */
+import Foto from './Foto.astro';
+import Boton from './Boton.astro';
+import { info } from '../data/rw';
+import { agendaEsEjemplo, eventos, recurrentes, tipos } from '../data/agenda';
+
+import fotoBloque from '../assets/img/colegio-5.webp';
+import fotoDesplome from '../assets/img/hombre-desplome.webp';
+import fotoVias from '../assets/img/zona-vias.webp';
+import fotoAutobelay from '../assets/img/hombre-autobelay.webp';
+
+interface Props {
+  variant?: 'pro' | 'clasica' | 'mixta';
+  id?: string;
+  class?: string;
+}
+
+const { variant = 'mixta', id = 'agenda', class: className } = Astro.props;
+const fotos = { bloque: fotoBloque, desplome: fotoDesplome, vias: fotoVias, autobelay: fotoAutobelay };
+const shape = variant === 'clasica' ? 'pill' : variant === 'mixta' ? 'offset' : 'rect';
+
+const fmt = (iso: string) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  return {
+    day: String(d),
+    month: date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', ''),
+    weekday: date.toLocaleDateString('es-ES', { weekday: 'long' }),
+  };
+};
+
+const destacados = eventos.filter((e) => e.destacado);
+const data = JSON.stringify({ eventos, recurrentes, tipos });
+---
+
+<section class:list={['ag', className]} id={id} data-agenda data-variant={variant} data-json={data}>
+  <div class="container">
+    <slot />
+
+    <div class="ag__board">
+      <h3 class="ag__sub">Próximos grandes eventos</h3>
+      <div class="ag__cards">
+        {
+          destacados.map((e) => {
+            const f = fmt(e.fecha);
+            return (
+              <article class="ag-card" data-date={e.fecha}>
+                <div class="ag-card__img">
+                  {e.foto && <Foto src={fotos[e.foto]} alt="" sizes="(min-width: 900px) 30vw, 100vw" widths={[480, 800]} />}
+                  <p class="ag-card__date">
+                    <strong>{f.day}</strong>
+                    <span>{f.month}</span>
+                  </p>
+                </div>
+                <div class="ag-card__body">
+                  <p class="ag-card__meta">
+                    <span class="ag-chip" style={`--c:${tipos[e.tipo].color}`}>{tipos[e.tipo].label.slice(0, -1)}</span>
+                    <span>
+                      {f.weekday} · {e.hora}
+                    </span>
+                  </p>
+                  <h4>{e.t}</h4>
+                  <p>{e.desc}</p>
+                  <Boton href={info.whatsapp} tone="ink" variant="outline" shape={shape} icon="out" external class="ag-card__cta">
+                    Apúntate
+                  </Boton>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+      <p class="ag__empty" hidden>No hay grandes eventos anunciados por ahora. Síguenos en Instagram para enterarte.</p>
+    </div>
+
+    <div class="ag__cal">
+      <div class="ag__calmain">
+        <div class="ag__bar">
+          <div class="ag__nav">
+            <button type="button" class="ag__arrow" data-month="-1" aria-label="Mes anterior">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5.5 8.5 12 15 18.5"></path></svg>
+            </button>
+            <h3 class="ag__month" aria-live="polite">Calendario</h3>
+            <button type="button" class="ag__arrow" data-month="1" aria-label="Mes siguiente">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5.5 15.5 12 9 18.5"></path></svg>
+            </button>
+          </div>
+          <div class="ag__filters" role="group" aria-label="Filtrar por tipo">
+            <button type="button" class="ag__filter" data-filter="todo" aria-pressed="true">Todo</button>
+            {
+              Object.entries(tipos).map(([k, v]) => (
+                <button type="button" class="ag__filter" data-filter={k} aria-pressed="false" style={`--c:${v.color}`}>
+                  <i />
+                  {v.label}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+        <div class="ag__week" aria-hidden="true">
+          <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+        <div class="ag__grid" role="grid" aria-label="Días del mes"></div>
+      </div>
+      <aside class="ag__day" aria-live="polite">
+        <p class="ag__dayname"></p>
+        <ul class="ag__list"></ul>
+      </aside>
+    </div>
+
+    {agendaEsEjemplo && <p class="ag__note">Agenda de ejemplo para la demo: fechas y eventos inventados.</p>}
+  </div>
+</section>
+
+<script>
+  type Tipo = 'curso' | 'actividad' | 'evento';
+  interface Data {
+    eventos: { fecha: string; t: string; tipo: Tipo; hora: string; desc: string }[];
+    recurrentes: { t: string; tipo: Tipo; dias: number[]; hora: string }[];
+    tipos: Record<Tipo, { label: string; color: string }>;
+  }
+
+  const key = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-agenda]')) {
+    const data: Data = JSON.parse(root.dataset.json ?? '{}');
+    const grid = root.querySelector<HTMLElement>('.ag__grid')!;
+    const monthEl = root.querySelector<HTMLElement>('.ag__month')!;
+    const dayName = root.querySelector<HTMLElement>('.ag__dayname')!;
+    const list = root.querySelector<HTMLElement>('.ag__list')!;
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('.ag__filter')];
+
+    const today = new Date();
+    const todayKey = key(today);
+    let view = new Date(today.getFullYear(), today.getMonth(), 1);
+    let selected = todayKey;
+    let filter: Tipo | 'todo' = 'todo';
+
+    /* Tablón: solo los próximos tres grandes eventos */
+    const cards = [...root.querySelectorAll<HTMLElement>('.ag-card')];
+    const upcoming = cards.filter((c) => (c.dataset.date ?? '') >= todayKey).slice(0, 3);
+    cards.forEach((c) => (c.hidden = !upcoming.includes(c)));
+    root.querySelector<HTMLElement>('.ag__empty')!.hidden = upcoming.length > 0;
+
+    const itemsFor = (d: Date) => {
+      const k = key(d);
+      const all = [
+        ...data.eventos.filter((e) => e.fecha === k),
+        ...data.recurrentes.filter((r) => r.dias.includes(d.getDay())),
+      ];
+      return all
+        .filter((e) => filter === 'todo' || e.tipo === filter)
+        .sort((a, b) => a.hora.localeCompare(b.hora, 'es', { numeric: true }));
+    };
+
+    const renderDay = () => {
+      const [y, m, dd] = selected.split('-').map(Number);
+      const d = new Date(y, m - 1, dd);
+      dayName.textContent = cap(d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }));
+      const items = itemsFor(d);
+      list.replaceChildren(
+        ...(items.length
+          ? items.map((e) => {
+              const li = document.createElement('li');
+              li.style.setProperty('--c', data.tipos[e.tipo].color);
+              const hora = document.createElement('span');
+              hora.className = 'ag__time';
+              hora.textContent = e.hora;
+              const title = document.createElement('strong');
+              title.textContent = e.t;
+              const tipo = document.createElement('span');
+              tipo.className = 'ag__type';
+              tipo.textContent = data.tipos[e.tipo].label.slice(0, -1);
+              li.append(hora, title, tipo);
+              if ('desc' in e) {
+                const p = document.createElement('p');
+                p.textContent = e.desc;
+                li.append(p);
+              }
+              return li;
+            })
+          : [Object.assign(document.createElement('li'), { className: 'ag__none', textContent: 'Nada programado este día. Prueba con otro.' })])
+      );
+    };
+
+    const render = () => {
+      monthEl.textContent = cap(view.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }));
+      const first = (view.getDay() + 6) % 7;
+      const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      const cells: HTMLElement[] = [];
+      for (let i = 0; i < first; i++) cells.push(Object.assign(document.createElement('span'), { className: 'ag__blank' }));
+      for (let n = 1; n <= days; n++) {
+        const d = new Date(view.getFullYear(), view.getMonth(), n);
+        const k = key(d);
+        const items = itemsFor(d);
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ag__cell';
+        b.dataset.key = k;
+        if (k === todayKey) b.classList.add('is-today');
+        if (k === selected) b.classList.add('is-selected');
+        if (k < todayKey) b.classList.add('is-past');
+        if (items.some((e) => e.tipo === 'evento')) b.classList.add('has-event');
+        b.setAttribute('aria-pressed', String(k === selected));
+        b.setAttribute('aria-label', `${n}: ${items.length ? `${items.length} planes` : 'sin planes'}`);
+        const num = document.createElement('span');
+        num.className = 'ag__num';
+        num.textContent = String(n);
+        const dots = document.createElement('span');
+        dots.className = 'ag__dots';
+        for (const t of new Set(items.map((e) => e.tipo))) {
+          const i = document.createElement('i');
+          i.style.setProperty('--c', data.tipos[t].color);
+          dots.append(i);
+        }
+        b.append(num, dots);
+        cells.push(b);
+      }
+      grid.replaceChildren(...cells);
+      renderDay();
+    };
+
+    grid.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.ag__cell');
+      if (!b) return;
+      selected = b.dataset.key!;
+      grid.querySelectorAll('.ag__cell').forEach((c) => {
+        const on = c === b;
+        c.classList.toggle('is-selected', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      renderDay();
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('.ag__arrow').forEach((a) =>
+      a.addEventListener('click', () => {
+        view = new Date(view.getFullYear(), view.getMonth() + Number(a.dataset.month), 1);
+        const isCurrent = view.getFullYear() === today.getFullYear() && view.getMonth() === today.getMonth();
+        selected = isCurrent ? todayKey : key(view);
+        render();
+      })
+    );
+
+    filters.forEach((f) =>
+      f.addEventListener('click', () => {
+        filter = f.dataset.filter as Tipo | 'todo';
+        filters.forEach((o) => o.setAttribute('aria-pressed', String(o === f)));
+        render();
+      })
+    );
+
+    render();
+  }
+</script>
+
+<style>
+  .ag {
+    --accent: var(--blue-deep);
+    --radius: 0px;
+    --card-bg: #fff;
+    --line: rgb(18 20 23 / 0.12);
+    padding-block: clamp(80px, 10vw, 150px);
+    background: #fff;
+  }
+
+  .ag[data-variant='clasica'] {
+    --accent: #e0651a;
+    --radius: 16px;
+  }
+
+  .ag__sub {
+    margin-bottom: 20px;
+    font-family: var(--f-display);
+    font-stretch: 115%;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- Tablón ---------- */
+  .ag__board {
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .ag__cards {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media (min-width: 760px) {
+    .ag__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .ag-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--card-bg);
+  }
+
+  .ag-card[hidden] {
+    display: none;
+  }
+
+  .ag-card__img {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #1b1d21;
+  }
+
+  .ag-card__img :global(picture),
+  .ag-card__img :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .ag-card:hover .ag-card__img :global(img) {
+      transform: scale(1.05);
+    }
+  }
+
+  .ag-card__date {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: grid;
+    place-items: center;
+    min-width: 64px;
+    padding: 8px 10px 9px;
+    border-radius: calc(var(--radius) * 0.6);
+    background: #fff;
+    color: var(--ink);
+    line-height: 1;
+    box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.5);
+  }
+
+  .ag-card__date strong {
+    font-family: var(--f-display);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: 2.3rem;
+  }
+
+  .ag-card__date span {
+    margin-top: 3px;
+    color: var(--accent);
+    font-family: var(--f-display);
+    font-stretch: 115%;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ag-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 22px 22px 24px;
+  }
+
+  .ag-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-3);
+    font-size: 0.85rem;
+  }
+
+  .ag-chip {
+    padding: 3px 8px;
+    border-radius: calc(var(--radius) * 0.5);
+    background: var(--c);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .ag-card h4 {
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .ag[data-variant='clasica'] .ag-card h4 {
+    font-stretch: 115%;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    text-transform: none;
+  }
+
+  .ag-card__body > p:not(.ag-card__meta) {
+    color: var(--ink-2);
+  }
+
+  .ag-card :global(.ag-card__cta) {
+    margin-top: auto;
+  }
+
+  .ag__empty {
+    color: var(--ink-3);
+  }
+
+  /* ---------- Calendario ---------- */
+  .ag__cal {
+    display: grid;
+    gap: 28px;
+    padding: clamp(20px, 3vw, 36px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper, #f3f3f0);
+  }
+
+  @media (min-width: 960px) {
+    .ag__cal {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 40px;
+    }
+  }
+
+  .ag__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 20px;
+    margin-bottom: 20px;
+  }
+
+  .ag__nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ag__month {
+    min-width: 11ch;
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 1.7rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ag[data-variant='clasica'] .ag__month {
+    font-stretch: 115%;
+    font-size: 1.25rem;
+    text-transform: none;
+  }
+
+  .ag__arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid var(--ink);
+    border-radius: calc(var(--radius) * 2);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .ag__arrow:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .ag__arrow svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ag__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ag__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) * 2);
+    background: #fff;
+    color: var(--ink-2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .ag__filter i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+
+  .ag__filter[aria-pressed='true'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .ag__week,
+  .ag__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .ag__week {
+    margin-bottom: 6px;
+    color: var(--ink-3);
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  .ag__grid :global(.ag__cell) {
+    position: relative;
+    display: grid;
+    align-content: space-between;
+    justify-items: center;
+    gap: 4px;
+    aspect-ratio: 4 / 3;
+    min-height: 42px;
+    padding: 8px 4px 7px;
+    border: 1px solid transparent;
+    border-radius: calc(var(--radius) * 0.6);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .ag__grid :global(.ag__cell:hover) {
+    border-color: var(--ink);
+  }
+
+  .ag__grid :global(.ag__cell.is-past) {
+    color: var(--ink-3);
+    background: transparent;
+  }
+
+  .ag__grid :global(.ag__cell.has-event) {
+    box-shadow: inset 0 -3px 0 #d62f5b;
+  }
+
+  .ag__grid :global(.ag__cell.is-today .ag__num) {
+    display: grid;
+    place-items: center;
+    width: 1.9em;
+    height: 1.9em;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .ag__grid :global(.ag__cell.is-selected) {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .ag__grid :global(.ag__num) {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .ag__grid :global(.ag__dots) {
+    display: flex;
+    gap: 3px;
+    min-height: 6px;
+  }
+
+  .ag__grid :global(.ag__dots i) {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+
+  .ag__grid :global(.ag__cell.is-selected .ag__dots i) {
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.6);
+  }
+
+  /* ---------- Día elegido ---------- */
+  .ag__dayname {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--f-display);
+    font-stretch: 72%;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .ag[data-variant='clasica'] .ag__dayname {
+    font-stretch: 115%;
+    font-size: 1.15rem;
+    text-transform: none;
+  }
+
+  .ag__list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ag__list :global(li) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 12px;
+    padding: 12px 14px;
+    border-left: 4px solid var(--c);
+    border-radius: calc(var(--radius) * 0.5);
+    background: #fff;
+    animation: ag-in 0.35s var(--ease-out) both;
+  }
+
+  .ag__list :global(.ag__time) {
+    grid-row: span 3;
+    min-width: 8.5ch;
+    color: var(--ink-3);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ag__list :global(strong) {
+    font-weight: 700;
+  }
+
+  .ag__list :global(.ag__type) {
+    color: var(--c);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ag__list :global(p) {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+  }
+
+  .ag__list :global(.ag__none) {
+    display: block;
+    border-left-color: var(--line);
+    color: var(--ink-3);
+  }
+
+  @keyframes ag-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .ag__note {
+    margin-top: 18px;
+    color: var(--ink-3);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 520px) {
+    .ag__grid :global(.ag__cell) {
+      padding: 6px 2px;
+    }
+    .ag__grid :global(.ag__num) {
+      font-size: 0.85rem;
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import '../styles/motion.css';
 import Foto from '../components/Foto.astro';
 import Logo from '../components/Logo.astro';
 import Boton from '../components/Boton.astro';
@@ -8,7 +9,9 @@ import Carrusel from '../components/Carrusel.astro';
 import VideoFondo from '../components/VideoFondo.astro';
 import PieSobrio from '../components/PieSobrio.astro';
 import SelectorVersion from '../components/SelectorVersion.astro';
-import { circuitos, tarifas, info } from '../data/rw';
+import { tarifas, info } from '../data/rw';
+import EscalaBloque from '../components/EscalaBloque.astro';
+import Agenda from '../components/Agenda.astro';
 
 import heroWide from '../assets/img/hero-wide.jpg';
 import hangar1 from '../assets/img/hangar-1.webp';
@@ -33,12 +36,12 @@ import claseEscalada from '../assets/img/clase-escalada.webp';
 import slab from '../assets/img/slab.webp';
 
 const sala = [
-  { img: hangar1, alt: 'Hangar 1 renovado, con los muros de bloque y la pasarela', caption: 'Hangar 1' },
+  { img: hangar1, alt: 'Zona de bloque renovada, con desplomes y la pasarela', caption: 'Zona de desplomes' },
   { img: zonaVias, alt: 'Zona de vías vista desde la entrada', caption: 'Zona de vías' },
   { img: autobelay3, alt: 'Muro de vías con el monograma RW y los autobelays', caption: 'Muro del autobelay' },
   { img: vistaGeneral, alt: 'Zona de bloque con volúmenes y bandas azules', caption: 'Zona de bloque' },
-  { img: tercerHangar, alt: 'Tercer hangar con las bandas azules', caption: 'Tercer hangar' },
-  { img: hombreDesplome, alt: 'Escalador en un desplome del hangar 1', caption: 'Desplomes' },
+  { img: tercerHangar, alt: 'Muro de bloque con presas de colores y bandas azules', caption: 'Bloque de colores' },
+  { img: hombreDesplome, alt: 'Escalador en un desplome', caption: 'En el desplome' },
   { img: autobelay2, alt: 'Vías con presas de colores y bandas azules', caption: 'Vías' },
   { img: gimnasio, alt: 'Zona de gimnasio y entrenamiento', caption: 'Gimnasio' },
 ];
@@ -82,6 +85,7 @@ const pasos = [
         <a href="#escalar">Bloque y vías</a>
         <a href="#tablas">Tablas</a>
         <a href="#cursos">Cursos</a>
+        <a href="#agenda">Agenda</a>
         <a href="#tarifas">Tarifas</a>
         <a href="#primera-vez">Primera vez</a>
       </nav>
@@ -136,7 +140,7 @@ const pasos = [
       <div class="container sala__head">
         <div>
           <p class="label label--dark">01 · La sala</p>
-          <h2 class="h">Tres hangares para escalar</h2>
+          <h2 class="h">Zonas de bloque y de vías</h2>
         </div>
         <div class="sala__intro">
           <p>
@@ -156,7 +160,7 @@ const pasos = [
           image={deEspaldas}
           alt="Escaladora resolviendo un bloque con la secuencia marcada sobre la foto"
           sizes="(min-width: 900px) 50vw, 100vw"
-          cropBottom={300}
+          fill
           points={[
             { x: 300, y: 440, kind: 'start', n: 1 },
             { x: 738, y: 548, kind: 'hand', n: 2 },
@@ -174,19 +178,9 @@ const pasos = [
         <p class="label">02 · Bloque y vías</p>
         <h2 class="h">Cada color, un nivel</h2>
         <p>
-          Los bloques se organizan en circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado
-          francés. Si vienes sin compañero, el autobelay te asegura.
+          Los bloques se organizan en circuitos de colores, del verde, el más fácil, al negro. Los blancos no tienen nivel: lo descubres al escalarlos. Las vías se leen por grado francés: 5a, 6a, 6b… Si vienes sin compañero, el autobelay te asegura.
         </p>
-        <ul class="legend">
-          {
-            circuitos.map((c) => (
-              <li>
-                <i style={`--c:${hex[c.color]}`} />
-                {c.label}
-              </li>
-            ))
-          }
-        </ul>
+        <EscalaBloque dark />
       </div>
         <div class="duo">
           <figure>
@@ -317,12 +311,24 @@ const pasos = [
       </div>
     </section>
 
+    <!-- Agenda -->
+    <Agenda variant="mixta">
+      <div class="head">
+        <div>
+          <p class="label label--dark">07 · Agenda</p>
+          <h2 class="h">Agenda y eventos</h2>
+          <p>Los cursos y actividades de cada semana y las fechas grandes: ligas, opens y maratones.</p>
+        </div>
+        <Boton href={info.instagram} variant="outline" shape="offset" icon="out" external>Avisos en Instagram</Boton>
+      </div>
+    </Agenda>
+
     <!-- Tarifas: cada una con su grado -->
     <section class="sec sec--paper" id="tarifas">
       <div class="container">
         <div class="head">
           <div>
-            <p class="label label--dark">07 · Tarifas · verano 2026</p>
+            <p class="label label--dark">08 · Tarifas · verano 2026</p>
             <h2 class="h">Elige tu vía</h2>
             <p>Cada tarifa lleva su grado: cuanto más compromiso, más grado, hasta el 8a del bono anual.</p>
           </div>
@@ -366,7 +372,7 @@ const pasos = [
         <video muted loop playsinline preload="none" data-src="/video/tardeo.mp4" data-poster="/video/tardeo-poster.jpg" aria-label="Terraza y barra de Rock & Wall por la tarde"></video>
       </figure>
       <div class="split__body">
-        <p class="label">08 · Tardeo</p>
+        <p class="label">09 · Tardeo</p>
         <h2 class="h">Y después, tardeo</h2>
         <p>
           Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
@@ -660,12 +666,23 @@ const pasos = [
   }
 
   /* La beta mantiene su proporción para que los círculos sigan encima de las presas */
+  /* La beta rellena la altura que marque la columna de texto; en móvil lleva su propia proporción */
   .split__media--beta {
+    position: relative;
     min-height: 0;
+    aspect-ratio: 1080 / 1180;
     background: var(--ink);
   }
 
+  @media (min-width: 900px) {
+    .split__media--beta {
+      aspect-ratio: auto;
+    }
+  }
+
   .split__media--beta :global(.beta-full) {
+    position: absolute;
+    inset: 0;
     width: 100%;
   }
 
@@ -828,22 +845,27 @@ const pasos = [
   }
 
   .escalar__body {
-    flex: 1;
+    flex: none;
     padding-block: clamp(48px, 5vw, 72px) 40px;
   }
 
   #escalar {
     min-height: 0;
+    column-gap: 4px;
   }
 
+  /* Las dos fotos se estiran hasta el final de la beta: en pantallas anchas crecen en vez de dejar hueco */
   .duo {
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr);
     gap: 4px;
+    min-height: clamp(200px, 17vw, 420px);
   }
 
   .duo figure {
-    aspect-ratio: 3 / 2;
+    min-height: 0;
   }
 
   /* ---------- La sala ---------- */

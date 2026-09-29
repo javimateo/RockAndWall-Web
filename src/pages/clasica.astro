@@ -1,11 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
+import '../styles/motion.css';
 import Foto from '../components/Foto.astro';
 import Logo from '../components/Logo.astro';
 import Boton from '../components/Boton.astro';
 import VideoFondo from '../components/VideoFondo.astro';
 import PieSobrio from '../components/PieSobrio.astro';
 import SelectorVersion from '../components/SelectorVersion.astro';
+import Agenda from '../components/Agenda.astro';
 import { tarifas, info } from '../data/rw';
 
 import heroWide from '../assets/img/hero-wide.jpg';
@@ -20,7 +22,7 @@ import toeHook from '../assets/img/toe-hook.webp';
 const marquee = ['Bloque', 'Vías', 'Moon Board', 'Kilter Board', 'Autobelay', 'Gimnasio', 'Tardeo'];
 
 const actividades = [
-  { img: tercerHangar, alt: 'Bloques de colores en el tercer hangar', t: 'Bloque', d: 'Más de 500 m² con circuitos de colores, del muy fácil al nivel galáctico.', href: info.reservar },
+  { img: tercerHangar, alt: 'Muro de bloque con presas de colores', t: 'Bloque', d: 'Más de 500 m² con circuitos de colores, del verde al negro, y blancos de nivel misterioso.', href: info.reservar },
   { img: autobelay, alt: 'Muro de vías con el monograma RW y los autobelays', t: 'Vías y autobelay', d: 'Más de 80 vías con cuerda. Sin compañero, el autobelay te asegura.', href: info.reservar },
   { img: kilter, alt: 'Kilter Board con los LEDs encendidos', t: 'Moon Board y Kilter', d: 'Tablas iluminadas para entrenar con problemas de todo el mundo.', href: info.reservar },
   { img: gimnasio, alt: 'Zona de gimnasio', t: 'Entrenamiento', d: 'Zona de gimnasio para completar la sesión o preparar tu proyecto.', href: info.tarifas },
@@ -38,6 +40,7 @@ const pasos = ['Regístrate online antes de venir.', 'Reserva día y hora.', 'Ve
       <nav class="nav__links" aria-label="Principal">
         <a href="#actividades">Qué hacer</a>
         <a href="#primer-dia">Primer día</a>
+        <a href="#agenda">Agenda</a>
         <a href="#tarifas">Tarifas</a>
         <a href="#tardeo">Tardeo</a>
       </nav>
@@ -90,7 +93,7 @@ const pasos = ['Regístrate online antes de venir.', 'Reserva día y hora.', 'Ve
         <Logo size="52px" tone="ink" />
         <h2 class="h">Tu rocódromo en Sevilla</h2>
         <p>
-          Tres hangares de pared en Calle Labrador para escalar como quieras: bloque para todos los niveles, vías con
+          Varias zonas de bloque y de vías en Calle Labrador para escalar como quieras: bloque para todos los niveles, vías con
           cuerda y autobelay, tablas de entrenamiento y gimnasio. Abierto los siete días de la semana.
         </p>
         <ul class="stats">
@@ -144,6 +147,15 @@ const pasos = ['Regístrate online antes de venir.', 'Reserva día y hora.', 'Ve
         <Foto src={toeHook} alt="Escaladora colgada de un bloque con un gancho de talón" sizes="(min-width: 900px) 50vw, 100vw" widths={[600, 900, 1200]} />
       </figure>
     </section>
+
+    <!-- Agenda -->
+    <Agenda variant="clasica">
+      <div class="ag-head">
+        <p class="kick">Agenda</p>
+        <h2 class="h">Qué pasa en Rock &amp; Wall</h2>
+        <p>Cursos y actividades de cada semana, y las fechas grandes: ligas, opens y maratones.</p>
+      </div>
+    </Agenda>
 
     <!-- Tarifas -->
     <section class="sec sec--black" id="tarifas">
@@ -592,6 +604,19 @@ const pasos = ['Regístrate online antes de venir.', 'Reserva día y hora.', 'Ve
     .card:hover .card__img :global(img) {
       transform: scale(1.05);
     }
+  }
+
+  /* ---------- Agenda ---------- */
+  .ag-head {
+    display: grid;
+    gap: 14px;
+    max-width: 40rem;
+    margin-bottom: 48px;
+  }
+
+  .ag-head p:not(.kick) {
+    color: var(--ink-2);
+    font-size: 1.05rem;
   }
 
   /* ---------- Tarifas ---------- */

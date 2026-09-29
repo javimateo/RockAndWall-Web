@@ -1,12 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import '../styles/motion.css';
 import Foto from '../components/Foto.astro';
 import Logo from '../components/Logo.astro';
 import Boton from '../components/Boton.astro';
 import VideoFondo from '../components/VideoFondo.astro';
 import PieSobrio from '../components/PieSobrio.astro';
 import SelectorVersion from '../components/SelectorVersion.astro';
-import { circuitos, tarifas, info } from '../data/rw';
+import { tarifas, info } from '../data/rw';
+import EscalaBloque from '../components/EscalaBloque.astro';
+import Agenda from '../components/Agenda.astro';
 
 import heroPoster from '../assets/img/hero-poster.jpg';
 import autobelay from '../assets/img/autobelay.webp';
@@ -19,15 +22,6 @@ import moonwallInclinada from '../assets/img/moonwall-inclinada.webp';
 import kilter from '../assets/img/kilterboard.webp';
 import moonwall from '../assets/img/moonwall.webp';
 import slab from '../assets/img/slab.webp';
-
-const hex: Record<string, string> = {
-  green: 'var(--h-green)',
-  yellow: 'var(--h-yellow)',
-  blue: 'var(--h-blue)',
-  orange: 'var(--h-orange)',
-  red: 'var(--h-red)',
-  black: '#1b1c1f',
-};
 
 const cifras = [
   { n: '+500 m²', t: 'de bloque' },
@@ -53,6 +47,7 @@ const pasos = [
         <a href="#tablas">Tablas</a>
         <a href="#tarifas">Tarifas</a>
         <a href="#primera-vez">Primera vez</a>
+        <a href="#agenda">Agenda</a>
       </nav>
       <Boton href={info.reservar} tone="blue" external>Reservar</Boton>
     </header>
@@ -105,7 +100,7 @@ const pasos = [
       <div class="container">
         <div class="head">
           <p class="eyebrow eyebrow--dark">01 · La sala</p>
-          <h2 class="h">Tres hangares para escalar</h2>
+          <h2 class="h">Zonas de bloque y de vías</h2>
           <p class="head__text">
             Bloque para todos los niveles, vías con cuerda y autobelay, tablas de entrenamiento y zona de gimnasio. Todo
             bajo el mismo techo, en Calle Labrador 8.
@@ -121,12 +116,12 @@ const pasos = [
             <figcaption>Zona de bloque</figcaption>
           </figure>
           <figure class="gallery__c">
-            <Foto src={tercerHangar} alt="Tercer hangar con las bandas azules" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
-            <figcaption>Tercer hangar</figcaption>
+            <Foto src={tercerHangar} alt="Muro de bloque con presas de colores y bandas azules" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
+            <figcaption>Bloque de colores</figcaption>
           </figure>
           <figure class="gallery__d">
-            <Foto src={primerHangar} alt="Primer hangar de Rock & Wall" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
-            <figcaption>Primer hangar</figcaption>
+            <Foto src={primerHangar} alt="Zona de bloque con desplomes y volúmenes" sizes="(min-width: 900px) 33vw, 50vw" widths={[480, 800]} />
+            <figcaption>Desplomes</figcaption>
           </figure>
           <figure class="gallery__e">
             <Foto src={gimnasio} alt="Zona de gimnasio y entrenamiento" sizes="(min-width: 900px) 33vw, 100vw" widths={[480, 800]} />
@@ -145,19 +140,9 @@ const pasos = [
         <p class="eyebrow">02 · Bloque y vías</p>
         <h2 class="h">Cada color, un nivel</h2>
         <p>
-          Los bloques se organizan en circuitos de colores, del muy fácil al nivel galáctico. Las vías se leen por grado
-          francés. Si vienes sin compañero, el autobelay te asegura.
+          Los bloques se organizan en circuitos de colores, del verde, el más fácil, al negro. Los blancos no tienen nivel: lo descubres al escalarlos. Las vías se leen por grado francés: 5a, 6a, 6b… Si vienes sin compañero, el autobelay te asegura.
         </p>
-        <ul class="legend">
-          {
-            circuitos.map((c) => (
-              <li>
-                <i style={`--c:${hex[c.color]}`} />
-                {c.label}
-              </li>
-            ))
-          }
-        </ul>
+        <EscalaBloque dark />
       </div>
     </section>
 
@@ -217,12 +202,23 @@ const pasos = [
       </div>
     </section>
 
+    <!-- Agenda -->
+    <Agenda variant="pro">
+      <div class="head head--row">
+        <div>
+          <p class="eyebrow eyebrow--dark">05 · Agenda</p>
+          <h2 class="h">Agenda y eventos</h2>
+        </div>
+        <Boton href={info.instagram} variant="outline" icon="out" external>Avisos en Instagram</Boton>
+      </div>
+    </Agenda>
+
     <!-- Tarifas -->
     <section class="sec sec--paper" id="tarifas">
       <div class="container">
         <div class="head head--row">
           <div>
-            <p class="eyebrow eyebrow--dark">05 · Tarifas · verano 2026</p>
+            <p class="eyebrow eyebrow--dark">06 · Tarifas · verano 2026</p>
             <h2 class="h">Tarifas</h2>
           </div>
           <Boton href={info.tarifas} variant="outline" icon="out" external>Todas las tarifas</Boton>
@@ -259,7 +255,7 @@ const pasos = [
     <!-- Tardeo: bloque de color sólido -->
     <section class="split split--blue" id="tardeo">
       <div class="split__body">
-        <p class="eyebrow">06 · Tardeo</p>
+        <p class="eyebrow">07 · Tardeo</p>
         <h2 class="h">Y después, tardeo</h2>
         <p>
           Bajas del último bloque y la tarde sigue: una caña en la barra, con la pared todavía a la vista, y la terraza
@@ -378,6 +374,7 @@ const pasos = [
   /* ---------- Portada ---------- */
   .hero {
     display: grid;
+    overflow: hidden;
     min-height: min(100svh, 980px);
     background: var(--ink);
   }

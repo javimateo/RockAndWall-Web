@@ -17,22 +17,30 @@ export const info = {
   whatsapp: 'https://wa.me/message/7ZFD6GW3YPDOG1',
 };
 
-/** PROVISIONAL: orden real de colores de los circuitos de bloque. */
+/** Circuitos de bloque, de más fácil a más difícil. */
 export const circuitos = [
-  { color: 'green', label: 'Muy fácil' },
-  { color: 'yellow', label: 'Fácil' },
-  { color: 'blue', label: 'Medio' },
-  { color: 'orange', label: 'Difícil' },
-  { color: 'red', label: 'Muy difícil' },
-  { color: 'black', label: 'Nivel galáctico' },
+  { color: 'green', label: 'Verde' },
+  { color: 'blue', label: 'Azul' },
+  { color: 'yellow', label: 'Amarillo' },
+  { color: 'orange', label: 'Naranja' },
+  { color: 'pink', label: 'Rosa' },
+  { color: 'red', label: 'Rojo' },
+  { color: 'black', label: 'Negro' },
 ] as const;
+
+/** Los bloques blancos no tienen nivel asignado. */
+export const misterioso = {
+  color: 'white',
+  label: 'Blanco',
+  desc: 'Nivel misterioso: lo decides tú al escalarlo',
+} as const;
 
 const tarjeta = 'Los bonos llevan 5 € de suplemento por la tarjeta al empezar.';
 
 export const tarifas = [
   {
     n: '01',
-    grade: 'IV+',
+    grade: '5a',
     color: 'white',
     name: 'Pase de día',
     price: '10',
