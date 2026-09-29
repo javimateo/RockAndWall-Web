@@ -26,9 +26,9 @@ import gimnasio from '../assets/img/gimnasio.webp';
 import deEspaldas from '../assets/img/de-espaldas.webp';
 import hombreAutobelay from '../assets/img/hombre-autobelay.webp';
 import hombreEscalando from '../assets/img/hombre-escalando.webp';
-import moonwallInclinada from '../assets/img/moonwall-inclinada.webp';
+import kilterInclinada from '../assets/img/kilterboard-inclinada.webp';
+import moon from '../assets/img/moonboard.webp';
 import kilter from '../assets/img/kilterboard.webp';
-import moonwall from '../assets/img/moonwall.webp';
 import escuelaInfantil from '../assets/img/escuela-infantil.webp';
 import colegio1 from '../assets/img/colegio-1.webp';
 import colegio3 from '../assets/img/colegio-3.webp';
@@ -199,7 +199,7 @@ const pasos = [
 
     <!-- Tablas -->
     <section class="board" id="tablas">
-      <Foto src={moonwallInclinada} alt="Moon Board inclinada con los LEDs encendidos" sizes="100vw" class="board__bg" />
+      <Foto src={kilterInclinada} alt="Kilter Board inclinada con los LEDs encendidos" sizes="100vw" class="board__bg" />
       <div class="container board__grid">
         <div class="board__copy">
           <p class="label">03 · Tablas</p>
@@ -211,12 +211,12 @@ const pasos = [
         </div>
         <div class="board__thumbs">
           <figure>
-            <Foto src={kilter} alt="Kilter Board con los LEDs encendidos" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
-            <figcaption>Kilter Board</figcaption>
+            <Foto src={moon} alt="Moon Board con los LEDs encendidos" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Moon Board</figcaption>
           </figure>
           <figure>
-            <Foto src={moonwall} alt="Detalle de las presas de la Moon Board" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
-            <figcaption>Moon Board</figcaption>
+            <Foto src={kilter} alt="Detalle de las presas de la Kilter Board" sizes="(min-width: 900px) 20vw, 50vw" widths={[480, 800]} />
+            <figcaption>Kilter Board</figcaption>
           </figure>
         </div>
       </div>
@@ -807,12 +807,6 @@ const pasos = [
 
   .board__thumbs figure,
   .duo figure,
-  .ig__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px 20px;
-  }
-
   .ig__reel {
     position: relative;
     margin: 0;
@@ -821,6 +815,12 @@ const pasos = [
 
   .board__thumbs figure {
     aspect-ratio: 4 / 3;
+  }
+
+  .ig__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 20px;
   }
 
   .board__thumbs :global(picture),
