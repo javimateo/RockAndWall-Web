@@ -83,6 +83,7 @@ const pasos = [
       <nav class="nav__links" aria-label="Principal">
         <a href="#sala">La sala</a>
         <a href="#escalar">Bloque y vías</a>
+        <a href="/pared">La pared hoy</a>
         <a href="#tablas">Tablas</a>
         <a href="#cursos">Cursos</a>
         <a href="#agenda">Agenda</a>
@@ -230,7 +231,10 @@ const pasos = [
             Cada semana se cambian varios bloques y vías, y lo avisamos en Instagram: qué se ha abierto, en qué zona y de
             qué color. Síguenos para no perderte ninguno.
           </p>
-          <Boton href={info.instagram} tone="ink" shape="offset" icon="out" external>@rockandwallclimbing</Boton>
+          <div class="ig__actions">
+            <Boton href="/pared" tone="blue" shape="offset">Ver qué hay montado</Boton>
+            <Boton href={info.instagram} tone="ink" variant="outline" shape="offset" icon="out" external>@rockandwallclimbing</Boton>
+          </div>
         </div>
         <figure class="ig__reel">
           <video muted loop playsinline preload="none" data-src="/video/nuevo-bloque.mp4" data-poster="/video/nuevo-bloque-poster.jpg" aria-label="Equipador montando un bloque nuevo"></video>
@@ -801,6 +805,12 @@ const pasos = [
 
   .board__thumbs figure,
   .duo figure,
+  .ig__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 20px;
+  }
+
   .ig__reel {
     position: relative;
     margin: 0;
@@ -1125,6 +1135,11 @@ const pasos = [
     display: grid;
     gap: 16px;
     max-width: 40rem;
+  }
+
+  /* Cabeceras sobre fondo oscuro */
+  .head--dark p:not(.label) {
+    color: #c9ced6 !important;
   }
 
   .head p:not(.label) {

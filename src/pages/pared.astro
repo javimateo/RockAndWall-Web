@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Boton from '../components/Boton.astro';
+import ParedHoy from '../components/ParedHoy.astro';
+import PieSobrio from '../components/PieSobrio.astro';
+import SelectorVersion from '../components/SelectorVersion.astro';
+import { info } from '../data/rw';
+---
+
+<Base title="La pared hoy · Rock & Wall Climbing" description="Todas las vías y bloques montados ahora en Rock & Wall, con su grado, zona y equipador.">
+  <header class="nav">
+    <a href="/mixta" class="nav__logo"><Logo size="44px" tone="white" /></a>
+    <a href="/mixta" class="nav__back">← Volver al inicio</a>
+    <Boton href={info.reservar} tone="blue" shape="offset" external>Reservar</Boton>
+  </header>
+
+  <ParedHoy class="pared-page">
+    <div class="intro">
+      <p class="label">La pared hoy</p>
+      <h1 class="h">Qué hay montado ahora</h1>
+      <p>
+        Todas las vías y bloques de la sala con su grado, zona y equipador. Cada semana se cambian varios: busca tu
+        próximo proyecto o mira qué es nuevo.
+      </p>
+    </div>
+  </ParedHoy>
+
+  <PieSobrio shape="offset" />
+  <SelectorVersion current="mixta" />
+</Base>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 22px var(--gutter);
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    margin-right: auto;
+  }
+
+  .nav__back {
+    font-family: var(--f-display);
+    font-stretch: 115%;
+    font-weight: 650;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    opacity: 0.85;
+  }
+
+  .nav__back:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 600px) {
+    .nav__back {
+      display: none;
+    }
+  }
+
+  :global(.pared-page) {
+    padding-top: clamp(40px, 6vw, 80px) !important;
+  }
+
+  .intro {
+    display: grid;
+    gap: 16px;
+    max-width: 44rem;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  .label {
+    color: rgb(255 255 255 / 0.75);
+    font-family: var(--f-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .h {
+    font-family: var(--f-display);
+    font-stretch: 64%;
+    font-weight: 880;
+    font-size: clamp(2.8rem, 1.4rem + 4.6vw, 5.8rem);
+    line-height: 0.88;
+    text-transform: uppercase;
+  }
+
+  .intro p:not(.label) {
+    color: #c9ced6;
+    font-size: 1.08rem;
+  }
+</style>
