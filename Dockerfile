@@ -1,4 +1,4 @@
-# ---- build: genera la web estática ----
+# ---- build: genera la web (páginas estáticas + el servidor del chat) ----
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -7,8 +7,13 @@ RUN npm ci --ignore-scripts
 COPY . .
 RUN npm run build
 
-# ---- web: nginx sirve la carpeta dist ----
-FROM nginx:1.27-alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+# ---- web: Node sirve las páginas y responde en /api/chat ----
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=80
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+COPY --from=build /app/dist ./dist
 EXPOSE 80
+# La clave de la API se pone en Coolify como variable de entorno: ANTHROPIC_API_KEY
+CMD ["node", "./dist/server/entry.mjs"]
