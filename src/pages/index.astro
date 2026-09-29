@@ -19,8 +19,8 @@ import primerHangar from '../assets/img/primer-hangar.jpg';
 import tercerHangar from '../assets/img/tercer-hangar.webp';
 import gimnasio from '../assets/img/gimnasio.webp';
 import deEspaldas from '../assets/img/de-espaldas.webp';
+import moon from '../assets/img/moonboard.webp';
 import kilter from '../assets/img/kilterboard.webp';
-import moonwall from '../assets/img/moonwall.webp';
 import genteEscalando from '../assets/img/gente-escalando.webp';
 
 const cifras = [
@@ -116,11 +116,11 @@ const pasos = [
         </figure>
         <figure>
           <Foto src={primerHangar} alt="Zona de bloque con desplomes y volúmenes" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
-          <figcaption class="hand">Desplomes</figcaption>
+          <figcaption class="hand">Zona de vías y bloques</figcaption>
         </figure>
         <figure>
           <Foto src={tercerHangar} alt="Muro de bloque con presas de colores y bandas azules" sizes="(min-width: 900px) 25vw, 50vw" widths={[480, 800]} />
-          <figcaption class="hand">Bloque de colores</figcaption>
+          <figcaption class="hand">Zona de bloque y Moon Board</figcaption>
         </figure>
         <figure>
           <Foto src={gimnasio} alt="Zona de gimnasio y entrenamiento" sizes="(min-width: 900px) 25vw, 100vw" widths={[480, 800]} />
@@ -154,7 +154,7 @@ const pasos = [
               <figcaption><Cinta rot={-5} size="sm">Nuevo bloque</Cinta></figcaption>
             </figure>
             <figure class="clips__wide">
-              <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 18vw, 50vw" widths={[400, 700]} />
+              <Foto src={hombreAutobelay} alt="Escalador subiendo por el muro del autobelay" sizes="(min-width: 900px) 30vw, 60vw" widths={[480, 800, 1200]} />
               <figcaption><Cinta color="blue" rot={-3} size="sm">Autobelay</Cinta></figcaption>
             </figure>
           </div>
@@ -189,12 +189,12 @@ const pasos = [
             </p>
           </div>
           <figure class="noche__a">
-            <Foto src={kilter} alt="Kilter Board con los LEDs encendidos" sizes="(min-width: 900px) 30vw, 100vw" widths={[480, 800]} />
-            <figcaption class="hand">Kilter Board</figcaption>
+            <Foto src={moon} alt="Moon Board con los LEDs encendidos" sizes="(min-width: 900px) 30vw, 100vw" widths={[480, 800]} />
+            <figcaption class="hand">Moon Board</figcaption>
           </figure>
           <figure class="noche__b">
-            <Foto src={moonwall} alt="Moon Board de Rock & Wall" sizes="(min-width: 900px) 22vw, 100vw" widths={[480, 800]} />
-            <figcaption class="hand">Moon Board</figcaption>
+            <Foto src={kilter} alt="Kilter Board de Rock & Wall" sizes="(min-width: 900px) 22vw, 100vw" widths={[480, 800]} />
+            <figcaption class="hand">Kilter Board</figcaption>
           </figure>
         </div>
       </div>
@@ -761,10 +761,10 @@ const pasos = [
 
   .clips {
     display: grid;
-    grid-template-columns: 0.62fr 1fr;
+    grid-template-columns: 0.5fr 1fr;
     gap: 14px;
     align-items: end;
-    width: min(100%, 460px);
+    width: min(100%, 640px);
     margin-top: 22px;
   }
 
@@ -791,7 +791,8 @@ const pasos = [
   .clips__wide :global(img) {
     display: block;
     width: 100%;
-    aspect-ratio: 1;
+    height: auto; /* si no, manda el alto de la imagen original (1200px) */
+    aspect-ratio: 3 / 2;
     object-fit: cover;
     border-radius: 6px;
   }
