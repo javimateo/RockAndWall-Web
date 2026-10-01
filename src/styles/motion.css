@@ -1,12 +1,12 @@
 /*
- * Movimiento ligado al scroll para las versiones profesional, clásica y mixta.
+ * Movimiento ligado al scroll para las versión moderna.
  * Son animaciones de CSS con animation-timeline (sin JavaScript): van en el hilo de composición
  * y siguen al dedo o la rueda en los dos sentidos. Donde no hay soporte, la página queda estática.
  */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     /* Títulos y textos: suben al entrar */
-    :is(.pro, .cl, .mx)
+    .mx
       :is(
         .h,
         .label,
@@ -30,41 +30,41 @@
     }
 
     /* Tarjetas y fotos pequeñas: en cascada */
-    :is(.pro, .cl, .mx)
+    .mx
       :is(.plan, .card, .curso, .ig__post, .steps li, .gallery figure, .board__thumbs figure, .cifras li, .ag-card) {
       animation: mo-rise-lg linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 80%;
     }
 
-    :is(.pro, .cl, .mx) :is(.plan, .card, .curso, .ig__post, .steps li, .cifras li, .ag-card):nth-child(2) {
+    .mx :is(.plan, .card, .curso, .ig__post, .steps li, .cifras li, .ag-card):nth-child(2) {
       animation-range: entry 8% entry 88%;
     }
 
-    :is(.pro, .cl, .mx) :is(.plan, .card, .curso, .ig__post, .steps li, .cifras li, .ag-card):nth-child(3) {
+    .mx :is(.plan, .card, .curso, .ig__post, .steps li, .cifras li, .ag-card):nth-child(3) {
       animation-range: entry 16% entry 96%;
     }
 
-    :is(.pro, .cl, .mx) :is(.plan, .card, .ig__post, .cifras li):nth-child(4) {
+    .mx :is(.plan, .card, .ig__post, .cifras li):nth-child(4) {
       animation-range: entry 24% cover 30%;
     }
 
     /* Fotos grandes: se acercan despacio al entrar (la beta no, para que las marcas sigan encima de las presas) */
-    :is(.pro, .cl, .mx) :is(.split__media:not(.split__media--beta), .first__photo, .curso__img, .card__img) :is(picture, video) {
+    .mx :is(.split__media:not(.split__media--beta), .first__photo, .curso__img, .card__img) :is(picture, video) {
       animation: mo-zoom linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 50%;
     }
 
     /* Fondo de las tablas: paralaje */
-    :is(.pro, .mx) .board .board__bg {
+    .mx .board .board__bg {
       animation: mo-parallax linear both;
       animation-timeline: view();
       animation-range: cover 0% cover 100%;
     }
 
     /* Portada: el vídeo se acerca un poco al salir de pantalla */
-    :is(.pro, .cl, .mx) .hero :is(.hero__bg, .hero__video) {
+    .mx .hero :is(.hero__bg, .hero__video) {
       animation: mo-exit linear both;
       animation-timeline: view();
       animation-range: exit 0% exit 100%;

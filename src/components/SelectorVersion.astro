@@ -1,15 +1,13 @@
 ---
 /** Selector flotante para enseñar las versiones de la demo una detrás de otra. */
 interface Props {
-  current: 'base' | 'pro' | 'clasica' | 'mixta';
+  current: 'base' | 'moderna';
 }
 
 const { current } = Astro.props;
 const versions = [
   { id: 'base', href: '/', label: 'Base' },
-  { id: 'pro', href: '/pro', label: 'Profesional' },
-  { id: 'clasica', href: '/clasica', label: 'Clásica' },
-  { id: 'mixta', href: '/mixta', label: 'Mixta' },
+  { id: 'moderna', href: '/moderna', label: 'Moderna' },
 ];
 ---
 

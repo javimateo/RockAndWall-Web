@@ -2,7 +2,7 @@
 /**
  * Agenda: tablón con los próximos grandes eventos y calendario mensual con cursos,
  * actividades y eventos. El calendario se pinta en el navegador a partir de src/data/agenda.ts.
- * variant ajusta acento, esquinas y tipografía a cada versión de la web.
+ * variant deja preparado el componente por si se le da otro estilo en otra versión.
  */
 import Foto from './Foto.astro';
 import Boton from './Boton.astro';
@@ -15,14 +15,14 @@ import fotoVias from '../assets/img/zona-vias.webp';
 import fotoAutobelay from '../assets/img/hombre-autobelay.webp';
 
 interface Props {
-  variant?: 'pro' | 'clasica' | 'mixta';
+  variant?: 'moderna';
   id?: string;
   class?: string;
 }
 
-const { variant = 'mixta', id = 'agenda', class: className } = Astro.props;
+const { variant = 'moderna', id = 'agenda', class: className } = Astro.props;
 const fotos = { bloque: fotoBloque, desplome: fotoDesplome, vias: fotoVias, autobelay: fotoAutobelay };
-const shape = variant === 'clasica' ? 'pill' : variant === 'mixta' ? 'offset' : 'rect';
+const shape = 'offset';
 
 const fmt = (iso: string) => {
   const [y, m, d] = iso.split('-').map(Number);
@@ -270,10 +270,6 @@ const data = JSON.stringify({ eventos, recurrentes, tipos });
     background: #fff;
   }
 
-  .ag[data-variant='clasica'] {
-    --accent: #e0651a;
-    --radius: 16px;
-  }
 
   .ag__sub {
     margin-bottom: 20px;
@@ -408,12 +404,6 @@ const data = JSON.stringify({ eventos, recurrentes, tipos });
     text-transform: uppercase;
   }
 
-  .ag[data-variant='clasica'] .ag-card h4 {
-    font-stretch: 115%;
-    font-size: 1.25rem;
-    line-height: 1.15;
-    text-transform: none;
-  }
 
   .ag-card__body > p:not(.ag-card__meta) {
     color: var(--ink-2);
@@ -469,11 +459,6 @@ const data = JSON.stringify({ eventos, recurrentes, tipos });
     text-transform: uppercase;
   }
 
-  .ag[data-variant='clasica'] .ag__month {
-    font-stretch: 115%;
-    font-size: 1.25rem;
-    text-transform: none;
-  }
 
   .ag__arrow {
     display: grid;
@@ -633,11 +618,6 @@ const data = JSON.stringify({ eventos, recurrentes, tipos });
     text-transform: uppercase;
   }
 
-  .ag[data-variant='clasica'] .ag__dayname {
-    font-stretch: 115%;
-    font-size: 1.15rem;
-    text-transform: none;
-  }
 
   .ag__list {
     display: grid;
